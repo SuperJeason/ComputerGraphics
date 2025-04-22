@@ -37,6 +37,8 @@
 #include "CCGRenderContext.h"
 #include "UIEventHandler.h"
 #include "CGDraw2DLineSeg.h"
+#include "CGPolylineSegment.h"
+#include "CGDraw2DPolylineSegment.h"
 
 // CCG2022111073冯杰Doc
 
@@ -220,6 +222,25 @@ bool CCG2022111073冯杰Doc::AddRenderable(std::shared_ptr<CGNode> r)
 void CCG2022111073冯杰Doc::OnDraw2dPolygon()
 {
 	// TODO: 在此添加命令处理程序代码
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	// 如果找到了视图，创建并设置绘制折线段的命令对象
+	if (view != nullptr) {
+		// 使用新的 CGDraw2DPolylineSegment 类
+		UIEventHandler::SetCommand(new CGDraw2DPolylineSegment(view->glfwWindow())); //创建绘制折线的命令对象
+	}
 }
 
 void CCG2022111073冯杰Doc::OnUpdateDraw2dPolygon(CCmdUI* pCmdUI)
