@@ -61,7 +61,7 @@ CCG2022111073冯杰Doc::CCG2022111073冯杰Doc() noexcept
 	mScene->SetMainCamera(std::make_shared<CGCamera>());
 	auto e = std::make_shared<CGGeode>();
 	auto line = std::make_shared<CGLineSegment>(glm::dvec3(100, 100, 0), glm::dvec3(400, 300, 0));
-	e->AddChild(line);
+	// e->AddChild(line);
 	auto g = std::make_shared<CGTransform>();
 	g->AddChild(e);
 	mScene->SetSceneData(g);

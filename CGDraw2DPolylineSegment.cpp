@@ -3,6 +3,7 @@
 #include "CG2022111073冯杰Doc.h" // 包含View之前要包含Doc
 #include "CG2022111073冯杰View.h" // 用户交互绘制，并将图形对象通过Doc添加到场景
 #include <gl/GL.h> // 包含 OpenGL 头文件
+#include "homework2.h"
 // 绘制二维线（辅助函数，与 CGDraw2DLineSeg 相同）
 void CGDraw2DPolylineSegment::draw2dline(glm::dvec3& s, glm::dvec3& e)
 {
@@ -60,15 +61,18 @@ int CGDraw2DPolylineSegment::OnMouseButton(GLFWwindow* window, int button, int a
                 glm::dvec3 startWCS = view->DCS2WCS(mRubberBandStart);
                 glm::dvec3 prePos1WCS = view->DCS2WCS(mPrePos1);
                 glm::dvec3 currentWCS = view->DCS2WCS(currentMousePos);
-                draw2dline(startWCS, prePos1WCS); // 擦除旧线
-                draw2dline(startWCS, currentWCS);
+                //draw2dline(startWCS, prePos1WCS); // 擦除旧线
+                MidLine(startWCS.x, startWCS.y, prePos1WCS.x, prePos1WCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
+                /*draw2dline(startWCS, currentWCS);*/
+                MidLine(startWCS.x, startWCS.y, currentWCS.x, currentWCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
                 glDisable(GL_COLOR_LOGIC_OP);
                 glfwSwapBuffers(window);
             }
             glColor3f(1.0f, 1.0f, 1.0f);
             glm::dvec3 startWCS = view->DCS2WCS(mRubberBandStart);
             glm::dvec3 currentWCS = view->DCS2WCS(currentMousePos);
-            draw2dline(startWCS, currentWCS);
+            /*draw2dline(startWCS, currentWCS);*/
+            MidLine(startWCS.x, startWCS.y, currentWCS.x, currentWCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
             // 添加新点，并更新橡皮筋线起点
             mPoints.push_back(currentMousePos);
             mRubberBandStart = currentMousePos; // 新橡皮筋线从当前点开始
@@ -91,7 +95,8 @@ int CGDraw2DPolylineSegment::OnMouseButton(GLFWwindow* window, int button, int a
                 glColor3f(1.0f, 1.0f, 1.0f);
                 glm::dvec3 startWCS = view->DCS2WCS(mRubberBandStart);
                 glm::dvec3 prePos1WCS = view->DCS2WCS(mPrePos1);
-                draw2dline(startWCS, prePos1WCS);
+                /*draw2dline(startWCS, prePos1WCS);*/
+                MidLine(startWCS.x, startWCS.y, prePos1WCS.x, prePos1WCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
                 glDisable(GL_COLOR_LOGIC_OP);
                 glfwSwapBuffers(window);
             }
@@ -145,7 +150,8 @@ int CGDraw2DPolylineSegment::OnCursorPos(GLFWwindow* window, double xpos, double
         if (mRubberBandMoveCount == 0)
         {
             // 第一次移动：直接绘制新线
-            draw2dline(startWCS, currentWCS);
+            /*draw2dline(startWCS, currentWCS);*/
+            MidLine(startWCS.x, startWCS.y, currentWCS.x, currentWCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
             mPrePos1 = mCurrentPos; // 记录第一次的终点
             mPrePos2 = mCurrentPos; // 初始化 mPrePos2
         }
@@ -153,8 +159,10 @@ int CGDraw2DPolylineSegment::OnCursorPos(GLFWwindow* window, double xpos, double
         {
             // 第二次移动：擦除第一次的线，再绘制新线
             glm::dvec3 prePos1WCS = view->DCS2WCS(mPrePos1);
-            draw2dline(startWCS, prePos1WCS); // 擦除旧线
-            draw2dline(startWCS, currentWCS); // 绘制新线
+            //draw2dline(startWCS, prePos1WCS); // 擦除旧线
+            MidLine(startWCS.x, startWCS.y, prePos1WCS.x, prePos1WCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
+            //draw2dline(startWCS, currentWCS); // 绘制新线
+            MidLine(startWCS.x, startWCS.y, currentWCS.x, currentWCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
             mPrePos2 = mPrePos1; // 更新 mPrePos2
             mPrePos1 = mCurrentPos; // 更新 mPrePos1
         }
@@ -162,8 +170,10 @@ int CGDraw2DPolylineSegment::OnCursorPos(GLFWwindow* window, double xpos, double
         {
             // 后续移动：擦除上上次的线，再绘制新线
             glm::dvec3 prePos2WCS = view->DCS2WCS(mPrePos2);
-            draw2dline(startWCS, prePos2WCS); // 擦除旧线
-            draw2dline(startWCS, currentWCS); // 绘制新线
+            //draw2dline(startWCS, prePos2WCS); // 擦除旧线
+            MidLine(startWCS.x, startWCS.y, prePos2WCS.x, prePos2WCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
+            //draw2dline(startWCS, currentWCS); // 绘制新线
+            MidLine(startWCS.x, startWCS.y, currentWCS.x, currentWCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
             mPrePos2 = mPrePos1; // 更新 mPrePos2
             mPrePos1 = mCurrentPos; // 更新 mPrePos1
         }
@@ -200,7 +210,8 @@ int CGDraw2DPolylineSegment::Cancel(GLFWwindow* window)
 			glColor3f(1.0f, 0.0f, 1.0f);
 			glm::dvec3 rbStartWCS = view->DCS2WCS(mRubberBandStart);
 			glm::dvec3 preRbEnd2WCS = view->DCS2WCS(mPrePos1);
-			draw2dline(rbStartWCS, preRbEnd2WCS); // 擦除旧橡皮筋线
+			//draw2dline(rbStartWCS, preRbEnd2WCS); // 擦除旧橡皮筋线
+            MidLine(rbStartWCS.x, rbStartWCS.y, preRbEnd2WCS.x, preRbEnd2WCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
 			glDisable(GL_COLOR_LOGIC_OP);
 			glfwSwapBuffers(window);
 		}

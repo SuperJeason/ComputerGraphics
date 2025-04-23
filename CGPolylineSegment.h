@@ -26,7 +26,7 @@ public:
 
 	// 添加一个点到折线
 	void AddPoint(const glm::dvec3& point);
-
+	
 	// 获取折线上的所有点
 	const std::vector<glm::dvec3>& GetPoints() const { return mPoints; }
 
