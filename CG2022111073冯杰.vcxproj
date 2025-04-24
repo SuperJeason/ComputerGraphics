@@ -201,6 +201,7 @@
     <ClInclude Include="CGGeometry.h" />
     <ClInclude Include="CGGroup.h" />
     <ClInclude Include="CGLineSegment.h" />
+    <ClInclude Include="CGModel2DTransform.h" />
     <ClInclude Include="CGNode.h" />
     <ClInclude Include="CGObject.h" />
     <ClInclude Include="CGPolylineSegment.h" />

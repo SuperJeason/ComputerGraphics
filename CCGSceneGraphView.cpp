@@ -29,6 +29,8 @@
 IMPLEMENT_DYNCREATE(CCGSceneGraphView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CCGSceneGraphView, CTreeView)
+	ON_WM_CREATE()
+	ON_NOTIFY_REFLECT(TVN_SELCHANGED, &CCGSceneGraphView::OnTvnSelchanged)
 END_MESSAGE_MAP()
 
 
@@ -41,6 +43,7 @@ CCGSceneGraphView::CCGSceneGraphView()
 
 CCGSceneGraphView::~CCGSceneGraphView()
 {
+	GetTreeCtrl().DeleteAllItems();
 }
 
 BOOL CCGSceneGraphView::PreCreateWindow(CREATESTRUCT& cs)
@@ -81,3 +84,44 @@ CCG2022111073冯杰Doc* CCGSceneGraphView::GetDocument() // 非调试版本是�
 
 
 // CCGSceneGraphView 消息处理程序
+
+void CCGSceneGraphView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	CCG2022111073冯杰Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	GetTreeCtrl().SetRedraw(TRUE);
+}
+
+int CCGSceneGraphView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (__super::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  在此添加您专用的创建代码
+	CTreeCtrl& tree = GetTreeCtrl();
+	DWORD dwStyles = tree.GetStyle();
+	dwStyles |= TVS_HASBUTTONS | TVS_SHOWSELALWAYS | TVS_HASLINES | TVS_LINESATROOT;// | TVS_CHECKBOXES
+	tree.ModifyStyle(0, dwStyles);
+	CCG2022111073冯杰Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (pDoc) {
+		pDoc->InstToSceneTree(&tree);
+	}
+	return 0;
+}
+
+void CCGSceneGraphView::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	CCG2022111073冯杰Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	mSelectedItem = GetTreeCtrl().GetSelectedItem();
+	pDoc->OnSelectSceneTreeItem(&GetTreeCtrl(), mSelectedItem);
+	*pResult = 0;
+}

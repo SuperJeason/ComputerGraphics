@@ -18,7 +18,8 @@
 class CGScene;
 class CGRenderContext;
 class CGNode;
-
+class CGGroup;
+class CCGSceneGraphView;
 class CCG2022111073冯杰Doc : public CDocument
 {
 protected: // 仅从序列化创建
@@ -31,6 +32,10 @@ public:
 public:
 	bool RenderScene(CGRenderContext* pRC);
 	bool AddRenderable(std::shared_ptr<CGNode> r);
+	CCGSceneGraphView* GetSceneGraphView();
+	void InstToSceneTree(CTreeCtrl* pTree);//实列节点加入场景树
+	void InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hInst, CGNode* node);
+	void OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM hItem); //场景树中选中节点
 
 // 重写
 public:
@@ -50,7 +55,8 @@ public:
 #endif
 
 protected:
-
+	CGGroup* mSelectedGroup = nullptr;
+	HTREEITEM mSelectedItem = nullptr;
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()

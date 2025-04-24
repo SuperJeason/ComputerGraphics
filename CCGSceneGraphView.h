@@ -61,6 +61,11 @@ protected:
 // 生成的消息映射函数
 protected:
 	DECLARE_MESSAGE_MAP()
+	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
+	HTREEITEM mSelectedItem = nullptr;
 };
 
 #ifndef _DEBUG  // CCGSceneGraphView.cpp 中的调试版本

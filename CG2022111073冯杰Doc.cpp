@@ -39,7 +39,7 @@
 #include "CGDraw2DLineSeg.h"
 #include "CGPolylineSegment.h"
 #include "CGDraw2DPolylineSegment.h"
-
+#include "CCGSceneGraphView.h"
 // CCG2022111073冯杰Doc
 
 IMPLEMENT_DYNCREATE(CCG2022111073冯杰Doc, CDocument)
@@ -52,18 +52,18 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰Doc, CDocument)
 END_MESSAGE_MAP()
 
 
-// CCG2022111073冯杰Doc 构造/析构
+// CCG2022111073冯杰(Doc 构造/析构
 
 CCG2022111073冯杰Doc::CCG2022111073冯杰Doc() noexcept
 {
 	// TODO: 在此添加一次性构造代码
 	mScene = std::make_shared<CGScene>();
 	mScene->SetMainCamera(std::make_shared<CGCamera>());
-	auto e = std::make_shared<CGGeode>();
-	auto line = std::make_shared<CGLineSegment>(glm::dvec3(100, 100, 0), glm::dvec3(400, 300, 0));
+	//auto e = std::make_shared<CGGeode>();
+	//auto line = std::make_shared<CGLineSegment>(glm::dvec3(100, 100, 0), glm::dvec3(400, 300, 0));
 	// e->AddChild(line);
 	auto g = std::make_shared<CGTransform>();
-	g->AddChild(e);
+	//g->AddChild(e);
 	mScene->SetSceneData(g);
 
 }
@@ -173,6 +173,10 @@ void CCG2022111073冯杰Doc::Dump(CDumpContext& dc) const
 
 void CCG2022111073冯杰Doc::OnDraw2dLineseg()
 {
+	if (!mSelectedGroup) {
+		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
+		return;
+	}
 	// TODO: 在此添加命令处理程序代码
 	CCG2022111073冯杰View* view = nullptr;
 	POSITION pos = GetFirstViewPosition();
@@ -210,12 +214,17 @@ bool CCG2022111073冯杰Doc::RenderScene(CGRenderContext* pRC)
 }
 bool CCG2022111073冯杰Doc::AddRenderable(std::shared_ptr<CGNode> r)
 {
-	if (mScene == nullptr)
-		return false;
-	CGGroup* g = mScene->GetSceneData()->asGroup();
-	if (g) {
-		g->AddChild(r);
+	if (mSelectedGroup) { //需要先选中一各组节点
+		//模型加入实例节点后加入场景
+		auto ge = std::make_shared<CGGeode>();
+		ge->AddChild(r);
+		mSelectedGroup->AddChild(ge);
+		CTreeCtrl& tree = GetSceneGraphView()->GetTreeCtrl();
+		InstToSceneTree(&tree, mSelectedItem, ge.get());
 		return true;
+	}
+	else {
+		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
 	}
 	return false;
 }
@@ -246,4 +255,104 @@ void CCG2022111073冯杰Doc::OnDraw2dPolygon()
 void CCG2022111073冯杰Doc::OnUpdateDraw2dPolygon(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
+}
+
+CCGSceneGraphView* CCG2022111073冯杰Doc::GetSceneGraphView()
+{
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+			if (pView->IsKindOf(RUNTIME_CLASS(CCGSceneGraphView))) {
+				CCGSceneGraphView* view = dynamic_cast<CCGSceneGraphView*>(pView);
+				return view;
+			}
+	}
+	return nullptr;
+}
+void CCG2022111073冯杰Doc::InstToSceneTree(CTreeCtrl* pTree)
+{
+	TV_INSERTSTRUCT tvinsert;
+	HTREEITEM hInst;
+	tvinsert.hParent = NULL;
+	tvinsert.hInsertAfter = TVI_LAST;
+	tvinsert.item.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_TEXT | TVIF_PARAM;
+	tvinsert.item.hItem = NULL;
+	tvinsert.item.state = 0;
+	tvinsert.item.stateMask = 0;
+	tvinsert.item.cchTextMax = 40;
+	tvinsert.item.cChildren = 0;
+	tvinsert.item.lParam = NULL;//
+	CString str(_T("场景"));
+	tvinsert.item.pszText = str.GetBuffer();
+	str.ReleaseBuffer();
+	hInst = pTree->InsertItem(&tvinsert);
+	pTree->SetItemData(hInst, DWORD_PTR(mScene.get()));
+	InstToSceneTree(pTree, hInst, mScene->GetSceneData());
+	pTree->Expand(hInst, TVE_EXPAND);
+}
+void CCG2022111073冯杰Doc::InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hParent, CGNode* node)
+{
+	TV_INSERTSTRUCT tvinsert;
+	HTREEITEM hTree;
+	tvinsert.hParent = hParent;
+	tvinsert.hInsertAfter = TVI_LAST;
+	tvinsert.item.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_TEXT | TVIF_PARAM;
+	tvinsert.item.hItem = NULL;
+	tvinsert.item.state = 0;
+	tvinsert.item.stateMask = 0;
+	tvinsert.item.cchTextMax = 40;
+	tvinsert.item.cChildren = 0;
+	tvinsert.item.lParam = LPARAM(&node);//
+	if (node->asGeode()) {
+		CString str(_T("Geode"));
+		tvinsert.item.pszText = str.GetBuffer();
+		str.ReleaseBuffer();
+		hTree = pTree->InsertItem(&tvinsert);
+		pTree->SetItemData(hTree, DWORD_PTR(node));
+		//叶子实例节点不再显示模型节点
+	}
+	else if (node->asTransform()) {
+		CString str(_T("Trans"));
+		tvinsert.item.pszText = str.GetBuffer();
+		str.ReleaseBuffer();
+		hTree = pTree->InsertItem(&tvinsert);
+		pTree->SetItemData(hTree, DWORD_PTR(node));
+		unsigned int childs = node->asTransform()->GetNumChildren();
+		for (unsigned int i = 0; i < childs; i++) {
+			InstToSceneTree(pTree, hTree, node->asTransform()->GetChild(i));
+		}
+	}
+	else if (node->asGroup()) {
+		CString str(_T("Group"));
+		tvinsert.item.pszText = str.GetBuffer();
+		str.ReleaseBuffer();
+		hTree = pTree->InsertItem(&tvinsert);
+		pTree->SetItemData(hTree, DWORD_PTR(node));
+		unsigned int childs = node->asGroup()->GetNumChildren();
+		for (unsigned int i = 0; i < childs; i++) {
+			InstToSceneTree(pTree, hTree, node->asGroup()->GetChild(i));
+		}
+	}
+}
+void CCG2022111073冯杰Doc::OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM hItem)
+{
+	mSelectedItem = hItem;
+	if (!mSelectedItem) {
+		mSelectedGroup = nullptr;
+		return;
+	}
+	HTREEITEM hRoot = pTree->GetRootItem();
+	if (mSelectedItem == hRoot) {
+		mSelectedGroup = nullptr;
+	}
+	else {
+		CGGroup* node = (CGGroup*)(pTree->GetItemData(mSelectedItem));
+		if (node && node->asGroup() && !(node->asGeode())) { //不允许叶子节点上再
+			mSelectedGroup = dynamic_cast<CGGroup*>(node);
+		}
+		else {
+			mSelectedGroup = nullptr;
+		}
+	}
 }

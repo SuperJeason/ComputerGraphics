@@ -27,3 +27,26 @@ bool CGNode::Render(CGRenderContext* pRC, CGCamera* pCamera)
 		return false;
 	return true;
 }
+
+//+2支持共享子节点
+CGGroup* CGNode::GetParent(unsigned int i)
+{
+	if (i < mParents.size())
+		return mParents[i];
+	return nullptr;
+}
+const CGGroup* CGNode::GetParent(unsigned int i) const
+{
+	if (i < mParents.size())
+		return mParents[i];
+		return nullptr;
+}
+void CGNode::AddParent(CGGroup* parent)
+{
+	mParents.push_back(parent);
+}
+void CGNode::RemoveParent(CGGroup* parent)
+{
+	auto pitr = std::find(mParents.begin(), mParents.end(), parent);
+	if (pitr != mParents.end()) mParents.erase(pitr);
+}
