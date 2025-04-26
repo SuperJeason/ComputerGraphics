@@ -70,4 +70,5 @@ public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dPolygon();
 	afx_msg void OnUpdateDraw2dPolygon(CCmdUI* pCmdUI);
+	afx_msg void OnTranslateLeft();
 };

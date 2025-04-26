@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰Doc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_DRAW2d_LINESEG, &CCG2022111073冯杰Doc::OnUpdateDraw2dLineseg)
 	ON_COMMAND(ID_DRAW2D_POLYGON, &CCG2022111073冯杰Doc::OnDraw2dPolygon)
 	ON_UPDATE_COMMAND_UI(ID_DRAW2D_POLYGON, &CCG2022111073冯杰Doc::OnUpdateDraw2dPolygon)
+	ON_COMMAND(ID_TRANSLATE_LEFT, &CCG2022111073冯杰Doc::OnTranslateLeft)
 END_MESSAGE_MAP()
 
 
@@ -355,4 +356,8 @@ void CCG2022111073冯杰Doc::OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM h
 			mSelectedGroup = nullptr;
 		}
 	}
+}
+void CCG2022111073冯杰Doc::OnTranslateLeft()
+{
+	// TODO: 在此添加命令处理程序代码
 }
