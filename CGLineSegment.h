@@ -11,6 +11,7 @@ public:
 	virtual void Serialize(CArchive& ar) override;
 	//绘制对象（在派生类中重写）
 	virtual bool Render(CGRenderContext* pRC, CGCamera* pCamera);
+	virtual void Translate(double tx, double ty); //平移
 protected:
 	glm::dvec3 mStart;
 	glm::dvec3 mEnd;

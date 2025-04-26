@@ -37,3 +37,12 @@ bool CGLineSegment::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	glEnd();
 	return true;
 }
+
+void CGLineSegment::Translate(double tx, double ty)
+{
+	mStart.x += tx;
+	mStart.y += ty;
+
+	mEnd.x += tx;
+	mEnd.y += ty;
+}

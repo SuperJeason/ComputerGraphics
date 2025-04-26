@@ -232,6 +232,7 @@
     <ClCompile Include="CGGeometry.cpp" />
     <ClCompile Include="CGGroup.cpp" />
     <ClCompile Include="CGLineSegment.cpp" />
+    <ClCompile Include="CGModel2DTransform.cpp" />
     <ClCompile Include="CGNode.cpp" />
     <ClCompile Include="CGObject.cpp" />
     <ClCompile Include="CGPolylineSegment.cpp" />

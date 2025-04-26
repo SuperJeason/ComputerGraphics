@@ -40,6 +40,7 @@
 #include "CGPolylineSegment.h"
 #include "CGDraw2DPolylineSegment.h"
 #include "CCGSceneGraphView.h"
+#include "CGModel2DTransform.h"
 // CCG2022111073冯杰Doc
 
 IMPLEMENT_DYNCREATE(CCG2022111073冯杰Doc, CDocument)
@@ -360,4 +361,25 @@ void CCG2022111073冯杰Doc::OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM h
 void CCG2022111073冯杰Doc::OnTranslateLeft()
 {
 	// TODO: 在此添加命令处理程序代码
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	// 如果找到了视图，创建并设置绘制折线段的命令对象
+	if (view != nullptr) {
+		// 
+		UIEventHandler::SetCommand(new CGModel2DTransform(mSelectedItem, view->glfwWindow())); //创建绘制折线的命令对象
+	}
 }
+
+
