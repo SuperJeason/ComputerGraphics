@@ -54,6 +54,8 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰Doc, CDocument)
 	ON_COMMAND(ID_TRANSLATE_RIGHT, &CCG2022111073冯杰Doc::OnTranslateRight)
 	ON_COMMAND(ID_TRANSLATE_UP, &CCG2022111073冯杰Doc::OnTranslateUp)
 	ON_COMMAND(ID_TRANSLATE_DOWN, &CCG2022111073冯杰Doc::OnTranslateDown)
+	ON_COMMAND(ID_ROTATE_R, &CCG2022111073冯杰Doc::OnRotateR)
+	ON_COMMAND(ID_ROTATE_L, &CCG2022111073冯杰Doc::OnRotateL)
 END_MESSAGE_MAP()
 
 
@@ -533,4 +535,17 @@ void CCG2022111073冯杰Doc::OnTranslateDown()
 		// 设置状态栏提示
 		view->ShowPrompt("对象已向下移动");
 	}
+}
+
+void CCG2022111073冯杰Doc::OnRotateR()
+{
+	// TODO: 在此添加命令处理程序代码
+	// 顺时针旋转操作
+
+}
+
+void CCG2022111073冯杰Doc::OnRotateL()
+{
+	// TODO: 在此添加命令处理程序代码
+	// 顺时针旋转操作
 }

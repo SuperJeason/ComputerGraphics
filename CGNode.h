@@ -41,7 +41,7 @@ public:
 	inline ParentList GetParents() { return mParents; }
 	inline unsigned int GetNumParents() const { return static_cast<unsigned int>(mParents.size()); }
 	virtual void Translate(float dx, float dy) {}
-
+	virtual void Rotate(double angle, double cx, double cy) {}
 protected:
 	virtual ~CGNode();
 	std::shared_ptr<CGCallback> mUpdateCallback = nullptr;
