@@ -40,6 +40,7 @@ public:
 	inline const ParentList& GetParents() const { return mParents; }
 	inline ParentList GetParents() { return mParents; }
 	inline unsigned int GetNumParents() const { return static_cast<unsigned int>(mParents.size()); }
+	virtual void Translate(float dx, float dy) {}
 
 protected:
 	virtual ~CGNode();

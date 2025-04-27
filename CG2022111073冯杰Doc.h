@@ -71,4 +71,7 @@ public:
 	afx_msg void OnDraw2dPolygon();
 	afx_msg void OnUpdateDraw2dPolygon(CCmdUI* pCmdUI);
 	afx_msg void OnTranslateLeft();
+	afx_msg void OnTranslateRight();
+	afx_msg void OnTranslateUp();
+	afx_msg void OnTranslateDown();
 };

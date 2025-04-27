@@ -38,7 +38,7 @@ bool CGLineSegment::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	return true;
 }
 
-void CGLineSegment::Translate(double tx, double ty)
+void CGLineSegment::Translate(float tx, float ty)
 {
 	mStart.x += tx;
 	mStart.y += ty;

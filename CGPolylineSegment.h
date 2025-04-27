@@ -36,6 +36,8 @@ public:
 	// 获取折线是否闭合
 	bool IsClosed() const { return mClosed; }
 
+	void Translate(float tx, float ty); //平移
+
 protected:
 	std::vector<glm::dvec3> mPoints; // 存储折线上的点
 	bool mClosed; // 标记折线是否闭合（首尾相连）

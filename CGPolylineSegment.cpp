@@ -93,3 +93,12 @@ void CGPolylineSegment::AddPoint(const glm::dvec3& point)
 {
 	mPoints.push_back(point);
 }
+
+void CGPolylineSegment::Translate(float tx, float ty) {
+	// 遍历所有点并应用平移
+	for (auto& point : mPoints) {
+		point.x += tx; // x 坐标平移
+		point.y += ty; // y 坐标平移
+		// z 坐标保持不变（如果是 2D 折线）
+	}
+}

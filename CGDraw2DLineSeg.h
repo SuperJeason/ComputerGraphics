@@ -12,6 +12,8 @@ public:
 	virtual int OnCursorPos(GLFWwindow* window, double xpos, double ypos) override;
 	//取消正在执行的命令（如按ESC键）
 	virtual int Cancel(GLFWwindow* window) override;
+
+
 protected:
 	glm::dvec3 mStart; //点击的第一点作为线段起点
 	glm::dvec3 mEnd; //点击的第二点作为线段终点

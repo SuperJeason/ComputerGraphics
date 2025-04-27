@@ -51,6 +51,9 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰Doc, CDocument)
 	ON_COMMAND(ID_DRAW2D_POLYGON, &CCG2022111073冯杰Doc::OnDraw2dPolygon)
 	ON_UPDATE_COMMAND_UI(ID_DRAW2D_POLYGON, &CCG2022111073冯杰Doc::OnUpdateDraw2dPolygon)
 	ON_COMMAND(ID_TRANSLATE_LEFT, &CCG2022111073冯杰Doc::OnTranslateLeft)
+	ON_COMMAND(ID_TRANSLATE_RIGHT, &CCG2022111073冯杰Doc::OnTranslateRight)
+	ON_COMMAND(ID_TRANSLATE_UP, &CCG2022111073冯杰Doc::OnTranslateUp)
+	ON_COMMAND(ID_TRANSLATE_DOWN, &CCG2022111073冯杰Doc::OnTranslateDown)
 END_MESSAGE_MAP()
 
 
@@ -361,6 +364,7 @@ void CCG2022111073冯杰Doc::OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM h
 void CCG2022111073冯杰Doc::OnTranslateLeft()
 {
 	// TODO: 在此添加命令处理程序代码
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
 	CCG2022111073冯杰View* view = nullptr;
 	POSITION pos = GetFirstViewPosition();
 	while (pos != NULL)
@@ -371,15 +375,162 @@ void CCG2022111073冯杰Doc::OnTranslateLeft()
 			break;
 		}
 	}
+	CTreeCtrl* pTree = &pSceneGraphView->GetTreeCtrl();
 	// 如果当前有正在执行的命令，先删除它
 	if (UIEventHandler::CurCommand()) {
 		UIEventHandler::DelCommand();
 	}
-	// 如果找到了视图，创建并设置绘制折线段的命令对象
+	
 	if (view != nullptr) {
-		// 
-		UIEventHandler::SetCommand(new CGModel2DTransform(mSelectedItem, view->glfwWindow())); //创建绘制折线的命令对象
+		// UIEventHandler::SetCommand(new CGModel2DTransform((CGRenderable*)pTree->GetItemData(mSelectedItem),view->glfwWindow())); 
+		CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
+		if (!renderable) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		CGNode* child = renderable->GetChild(0);
+		if (!child) { 
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return; 
+		}
+		// 直接应用向左平移变换（每次移动10个单位）
+		const float translateAmount = -10.0f; // 负值表示向左移动
+		child->Translate(translateAmount,0);
+		// 更新所有视图
+		UpdateAllViews(NULL);
+
+		// 设置状态栏提示
+		view->ShowPrompt("对象已向左移动");
 	}
 }
 
 
+
+void CCG2022111073冯杰Doc::OnTranslateRight()
+{
+	// TODO: 在此添加命令处理程序代码
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	CTreeCtrl* pTree = &pSceneGraphView->GetTreeCtrl();
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+
+	if (view != nullptr) {
+		// UIEventHandler::SetCommand(new CGModel2DTransform((CGRenderable*)pTree->GetItemData(mSelectedItem),view->glfwWindow())); 
+		CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
+		if (!renderable) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		CGNode* child = renderable->GetChild(0);
+		if (!child) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		// 直接应用向左平移变换（每次移动10个单位）
+		const float translateAmount = 10.0f; // 负值表示向右移动
+		child->Translate(translateAmount, 0);
+		// 更新所有视图
+		UpdateAllViews(NULL);
+
+		// 设置状态栏提示
+		view->ShowPrompt("对象已向左移动");
+	}
+}
+
+void CCG2022111073冯杰Doc::OnTranslateUp()
+{
+	// TODO: 在此添加命令处理程序代码
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	CTreeCtrl* pTree = &pSceneGraphView->GetTreeCtrl();
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+
+	if (view != nullptr) {
+		// UIEventHandler::SetCommand(new CGModel2DTransform((CGRenderable*)pTree->GetItemData(mSelectedItem),view->glfwWindow())); 
+		CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
+		if (!renderable) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		CGNode* child = renderable->GetChild(0);
+		if (!child) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		// 直接应用向左平移变换（每次移动10个单位）
+		const float translateAmount = 10.0f; // 负值表示向左移动
+		child->Translate(0, translateAmount);
+		// 更新所有视图
+		UpdateAllViews(NULL);
+
+		// 设置状态栏提示
+		view->ShowPrompt("对象已向上移动");
+	}
+}
+
+void CCG2022111073冯杰Doc::OnTranslateDown()
+{
+	// TODO: 在此添加命令处理程序代码
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	CTreeCtrl* pTree = &pSceneGraphView->GetTreeCtrl();
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+
+	if (view != nullptr) {
+		// UIEventHandler::SetCommand(new CGModel2DTransform((CGRenderable*)pTree->GetItemData(mSelectedItem),view->glfwWindow())); 
+		CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
+		if (!renderable) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		CGNode* child = renderable->GetChild(0);
+		if (!child) {
+			AfxMessageBox(_T("请先选择需要移动的子节点！"));
+			return;
+		}
+		// 直接应用向左平移变换（每次移动10个单位）
+		const float translateAmount = -10.0f; // 负值表示向左移动
+		child->Translate(0, translateAmount);
+		// 更新所有视图
+		UpdateAllViews(NULL);
+
+		// 设置状态栏提示
+		view->ShowPrompt("对象已向下移动");
+	}
+}
