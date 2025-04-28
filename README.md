@@ -1,7 +1,7 @@
 # 计算机图形学应用程序
 
 ## 展示
-![演示视频](./image/recording.gif)
+![演示视频](https://cdn.wmpvp.com/steamWeb/852EF416724848CE92B1C2BF42218DFE-1745854815021.gif)
 
 ## 项目简介
 
