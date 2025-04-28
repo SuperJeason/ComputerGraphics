@@ -66,7 +66,7 @@ int CGDraw2DPolylineSegment::OnMouseButton(GLFWwindow* window, int button, int a
                 /*draw2dline(startWCS, currentWCS);*/
                 MidLine(startWCS.x, startWCS.y, currentWCS.x, currentWCS.y, glm::vec3(1.0f, 1.0f, 1.0f));
                 glDisable(GL_COLOR_LOGIC_OP);
-                glfwSwapBuffers(window);
+                // glfwSwapBuffers(window);
             }
             glColor3f(1.0f, 1.0f, 1.0f);
             glm::dvec3 startWCS = view->DCS2WCS(mRubberBandStart);

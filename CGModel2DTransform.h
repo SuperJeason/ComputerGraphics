@@ -8,26 +8,25 @@
 class CGModel2DTransform : public UIEventHandler
 {
 public:
-    // Constructor with the object to be transformed (e.g., line segments, polylines)
-    CGModel2DTransform(CGRenderable* node, GLFWwindow* window = nullptr);
+    CGModel2DTransform(CGNode* node, GLFWwindow* window = nullptr);
     ~CGModel2DTransform();
 
-    virtual EventType GetType() override; // Command type
-
-    // Mouse wheel for scaling, left button drag for translation, right button drag for rotation
+    virtual EventType GetType() override; 
     virtual int OnMouseButton(GLFWwindow* window, int button, int action, int mods) override;
+
     virtual int OnCursorPos(GLFWwindow* window, double xpos, double ypos) override;
     virtual int OnMouseScroll(GLFWwindow* window, double xoffset, double yoffset) override;
 
-    // Cancel current command (e.g., when ESC is pressed)
     virtual int Cancel(GLFWwindow* window) override;
 
 protected:
-    CGRenderable* mNode; // The model being manipulated
-    glm::vec3 mPivotPoint; // Transformation reference point (set with Shift+Left Click)
+    CGNode* mNode; 
+    glm::vec3 mPivotPoint;
 
-    // Additional member variables needed for implementation
     bool mIsDragging;
     bool mIsRotating;
+    bool mShowPivot;
     glm::dvec2 mLastCursorPos;
+
+    const double M_PI = 3.1415926;
 };

@@ -102,3 +102,32 @@ void CGPolylineSegment::Translate(float tx, float ty) {
 		// z 坐标保持不变（如果是 2D 折线）
 	}
 }
+
+void CGPolylineSegment::Rotate(double angle, double cx, double cy)
+{
+	// 如果点列表为空，直接返回
+	if (mPoints.empty()) {
+		return;
+	}
+
+	// 创建变换矩阵
+	glm::dmat4 transform(1.0); // 初始化为单位矩阵
+
+	// 1. 平移到原点 (将旋转中心移到原点)
+	transform = glm::translate(transform, glm::dvec3(-cx, -cy, 0.0));
+
+	// 2. 绕Z轴旋转 (逆时针为正)
+	transform = glm::rotate(transform, glm::radians(angle), glm::dvec3(0.0, 0.0, 1.0));
+
+	// 3. 平移回原位置
+	transform = glm::translate(transform, glm::dvec3(cx, cy, 0.0));
+
+	// 应用变换到所有点
+	for (auto& point : mPoints) {
+		// 将点转换为齐次坐标 (w=1)
+		glm::dvec4 transformed = transform * glm::dvec4(point, 1.0);
+
+		// 更新点坐标 (除以w分量，虽然这里w=1不需要除)
+		point = glm::dvec3(transformed.x, transformed.y, point.z);
+	}
+}

@@ -541,6 +541,38 @@ void CCG2022111073冯杰Doc::OnRotateR()
 {
 	// TODO: 在此添加命令处理程序代码
 	// 顺时针旋转操作
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	CTreeCtrl* pTree = &pSceneGraphView->GetTreeCtrl();
+	CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
+	if (!renderable) {
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	CGNode* child = renderable->GetChild(0);
+	if (!child) {
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	// 如果找到了视图，创建并设置绘制折线段的命令对象
+	if (view != nullptr) {
+		// 使用新的 CGDraw2DPolylineSegment 类
+		UIEventHandler::SetCommand(new CGModel2DTransform(child, view->glfwWindow())); //创建绘制折线的命令对象
+		UpdateAllViews(NULL);
+	}
 
 }
 
@@ -548,4 +580,36 @@ void CCG2022111073冯杰Doc::OnRotateL()
 {
 	// TODO: 在此添加命令处理程序代码
 	// 顺时针旋转操作
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	CTreeCtrl* pTree = &pSceneGraphView->GetTreeCtrl();
+	CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
+	if (!renderable) {
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	// 如果当前有正在执行的命令，先删除它
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	CGNode* child = renderable->GetChild(0);
+	if (!child) {
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	// 如果找到了视图，创建并设置绘制折线段的命令对象
+	if (view != nullptr) {
+		// 使用新的 CGDraw2DPolylineSegment 类
+		UIEventHandler::SetCommand(new CGModel2DTransform(child,view->glfwWindow())); //创建绘制折线的命令对象
+		UpdateAllViews(NULL);
+	}
 }

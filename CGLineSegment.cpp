@@ -46,3 +46,29 @@ void CGLineSegment::Translate(float tx, float ty)
 	mEnd.x += tx;
 	mEnd.y += ty;
 }
+
+void CGLineSegment::Rotate(double angle, double cx, double cy)
+{
+	// 将角度转换为弧度（因为三角函数使用弧度）
+	double radians = angle * (M_PI / 180.0);
+
+	// 计算旋转矩阵的元素
+	double cosTheta = cos(radians);
+	double sinTheta = sin(radians);
+
+	// 创建旋转矩阵
+	glm::mat2 rotationMatrix(cosTheta, sinTheta, -sinTheta, cosTheta);
+
+	// 对起点进行旋转
+	glm::dvec2 startRel = glm::dvec2(mStart.x - cx, mStart.y - cy);
+	glm::dvec2 rotatedStart = rotationMatrix * startRel;
+	mStart.x = rotatedStart.x + cx;
+	mStart.y = rotatedStart.y + cy;
+
+	// 对终点进行旋转
+	glm::dvec2 endRel = glm::dvec2(mEnd.x - cx, mEnd.y - cy);
+	glm::dvec2 rotatedEnd = rotationMatrix * endRel;
+	mEnd.x = rotatedEnd.x + cx;
+	mEnd.y = rotatedEnd.y + cy;
+}
+

@@ -12,7 +12,9 @@ public:
 	//绘制对象（在派生类中重写）
 	virtual bool Render(CGRenderContext* pRC, CGCamera* pCamera);
 	void Translate(float tx, float ty); //平移
+	virtual void Rotate(double angle, double cx, double cy);
 protected:
 	glm::dvec3 mStart;
 	glm::dvec3 mEnd;
+	const double M_PI = 3.1415926;
 };

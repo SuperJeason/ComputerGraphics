@@ -1,6 +1,7 @@
 #pragma once
 #include "CGGeometry.h"
 #include <vector> // 需要包含 vector 头文件来存储多个点
+#include <glm/gtc/matrix_transform.hpp>
 
 // 将类名修改为 CGPolylineSegment
 class CGPolylineSegment : public CGGeometry
@@ -37,6 +38,8 @@ public:
 	bool IsClosed() const { return mClosed; }
 
 	void Translate(float tx, float ty); //平移
+
+	virtual void Rotate(double angle, double cx, double cy);
 
 protected:
 	std::vector<glm::dvec3> mPoints; // 存储折线上的点
