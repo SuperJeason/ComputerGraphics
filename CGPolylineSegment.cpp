@@ -1,8 +1,8 @@
-#include "pch.h" // Èç¹ûÄãµÄÏîÄ¿Ê¹ÓÃÁËÔ¤±àÒëÍ·ÎÄ¼ş
+ï»¿#include "pch.h" // å¦‚æœä½ çš„é¡¹ç›®ä½¿ç”¨äº†é¢„ç¼–è¯‘å¤´æ–‡ä»¶
 #include "CGPolylineSegment.h"
-#include <gl/GL.h> // °üº¬ OpenGL Í·ÎÄ¼ş
+#include <gl/GL.h> // åŒ…å« OpenGL å¤´æ–‡ä»¶
 
-// ½«ÊµÏÖĞòÁĞ»¯ºêÖĞµÄÀàÃûĞŞ¸ÄÎª CGPolylineSegment
+// å°†å®ç°åºåˆ—åŒ–å®ä¸­çš„ç±»åä¿®æ”¹ä¸º CGPolylineSegment
 IMPLEMENT_SERIAL(CGPolylineSegment, CGGeometry, 1)
 
 CGPolylineSegment::CGPolylineSegment()
@@ -26,63 +26,63 @@ CGPolylineSegment::~CGPolylineSegment()
 
 void CGPolylineSegment::Serialize(CArchive& ar)
 {
-	CGGeometry::Serialize(ar); // µ÷ÓÃ»ùÀàµÄĞòÁĞ»¯·½·¨
+	CGGeometry::Serialize(ar); // è°ƒç”¨åŸºç±»çš„åºåˆ—åŒ–æ–¹æ³•
 
 	if (ar.IsStoring())
 	{
-		// ±£´æÊı¾İ
-		ar << (int)mPoints.size(); // ±£´æµãµÄÊıÁ¿
+		// ä¿å­˜æ•°æ®
+		ar << (int)mPoints.size(); // ä¿å­˜ç‚¹çš„æ•°é‡
 		for (const auto& point : mPoints)
 		{
-			// Ê¹ÓÃ << ÔËËã·ûĞòÁĞ»¯Ã¿¸öµãµÄ·ÖÁ¿
+			// ä½¿ç”¨ << è¿ç®—ç¬¦åºåˆ—åŒ–æ¯ä¸ªç‚¹çš„åˆ†é‡
 			ar << point.x << point.y << point.z;
 		}
-		ar << mClosed; // ±£´æ±ÕºÏ×´Ì¬
+		ar << mClosed; // ä¿å­˜é—­åˆçŠ¶æ€
 	}
 	else
 	{
-		// ¼ÓÔØÊı¾İ
+		// åŠ è½½æ•°æ®
 		int numPoints;
-		ar >> numPoints; // ¼ÓÔØµãµÄÊıÁ¿
-		mPoints.resize(numPoints); // µ÷ÕûµãÁĞ±í´óĞ¡
+		ar >> numPoints; // åŠ è½½ç‚¹çš„æ•°é‡
+		mPoints.resize(numPoints); // è°ƒæ•´ç‚¹åˆ—è¡¨å¤§å°
 		for (int i = 0; i < numPoints; ++i)
 		{
-			// Ê¹ÓÃ >> ÔËËã·û·´ĞòÁĞ»¯Ã¿¸öµãµÄ·ÖÁ¿
+			// ä½¿ç”¨ >> è¿ç®—ç¬¦ååºåˆ—åŒ–æ¯ä¸ªç‚¹çš„åˆ†é‡
 			ar >> mPoints[i].x >> mPoints[i].y >> mPoints[i].z;
 		}
-		ar >> mClosed; // ¼ÓÔØ±ÕºÏ×´Ì¬
+		ar >> mClosed; // åŠ è½½é—­åˆçŠ¶æ€
 	}
 }
 
-// äÖÈ¾
+// æ¸²æŸ“
 bool CGPolylineSegment::Render(CGRenderContext* pRC, CGCamera* pCamera)
 {
 	if (pRC == nullptr || pCamera == nullptr)
 		return false;
 
-	// ¼ì²éÊÇ·ñÓĞ×ã¹»µÄµãÀ´»æÖÆÏß¶Î
+	// æ£€æŸ¥æ˜¯å¦æœ‰è¶³å¤Ÿçš„ç‚¹æ¥ç»˜åˆ¶çº¿æ®µ
 	if (mPoints.size() < 2)
 	{
-		return false; // ÉÙÓÚÁ½¸öµãÎŞ·¨ĞÎ³ÉÏß¶Î
+		return false; // å°‘äºä¸¤ä¸ªç‚¹æ— æ³•å½¢æˆçº¿æ®µ
 	}
 
-	// ÉèÖÃ»æÖÆÑÕÉ« (·ÂÕÕ CGLineSegment Ê¹ÓÃ°×É«)
-	glColor3f(1.0f, 1.0f, 1.0f); // °×É«
+	// è®¾ç½®ç»˜åˆ¶é¢œè‰² (ä»¿ç…§ CGLineSegment ä½¿ç”¨ç™½è‰²)
+	glColor3f(1.0f, 1.0f, 1.0f); // ç™½è‰²
 
-	// Ê¹ÓÃ GL_LINE_STRIP »æÖÆÁ¬ĞøµÄÏß¶Î
+	// ä½¿ç”¨ GL_LINE_STRIP ç»˜åˆ¶è¿ç»­çš„çº¿æ®µ
 	glBegin(GL_LINE_STRIP);
 	for (const auto& point : mPoints)
 	{
-		glVertex3f(point.x, point.y, point.z); // Ìí¼Óµãµ½Ïß¶ÎĞòÁĞ
+		glVertex3f(point.x, point.y, point.z); // æ·»åŠ ç‚¹åˆ°çº¿æ®µåºåˆ—
 	}
 	glEnd();
 
-	// Èç¹ûÕÛÏß±ÕºÏ£¬ĞèÒªµ¥¶À»æÖÆ´Ó×îºóÒ»¸öµãµ½µÚÒ»¸öµãµÄÏß¶Î
+	// å¦‚æœæŠ˜çº¿é—­åˆï¼Œéœ€è¦å•ç‹¬ç»˜åˆ¶ä»æœ€åä¸€ä¸ªç‚¹åˆ°ç¬¬ä¸€ä¸ªç‚¹çš„çº¿æ®µ
 	if (mClosed && mPoints.size() >= 2)
 	{
 		glBegin(GL_LINES);
-		glVertex3f(mPoints.back().x, mPoints.back().y, mPoints.back().z); // ×îºóÒ»¸öµã
-		glVertex3f(mPoints.front().x, mPoints.front().y, mPoints.front().z); // µÚÒ»¸öµã
+		glVertex3f(mPoints.back().x, mPoints.back().y, mPoints.back().z); // æœ€åä¸€ä¸ªç‚¹
+		glVertex3f(mPoints.front().x, mPoints.front().y, mPoints.front().z); // ç¬¬ä¸€ä¸ªç‚¹
 		glEnd();
 	}
 
@@ -95,39 +95,61 @@ void CGPolylineSegment::AddPoint(const glm::dvec3& point)
 }
 
 void CGPolylineSegment::Translate(float tx, float ty) {
-	// ±éÀúËùÓĞµã²¢Ó¦ÓÃÆ½ÒÆ
+	// éå†æ‰€æœ‰ç‚¹å¹¶åº”ç”¨å¹³ç§»
 	for (auto& point : mPoints) {
-		point.x += tx; // x ×ø±êÆ½ÒÆ
-		point.y += ty; // y ×ø±êÆ½ÒÆ
-		// z ×ø±ê±£³Ö²»±ä£¨Èç¹ûÊÇ 2D ÕÛÏß£©
+		point.x += tx; // x åæ ‡å¹³ç§»
+		point.y += ty; // y åæ ‡å¹³ç§»
+		// z åæ ‡ä¿æŒä¸å˜ï¼ˆå¦‚æœæ˜¯ 2D æŠ˜çº¿ï¼‰
 	}
 }
 
 void CGPolylineSegment::Rotate(double angle, double cx, double cy)
 {
-	// Èç¹ûµãÁĞ±íÎª¿Õ£¬Ö±½Ó·µ»Ø
+	// å¦‚æœç‚¹åˆ—è¡¨ä¸ºç©ºï¼Œç›´æ¥è¿”å›
 	if (mPoints.empty()) {
 		return;
 	}
 
-	// ´´½¨±ä»»¾ØÕó
-	glm::dmat4 transform(1.0); // ³õÊ¼»¯Îªµ¥Î»¾ØÕó
+	// åˆ›å»ºå˜æ¢çŸ©é˜µ
+	glm::dmat4 transform(1.0); // åˆå§‹åŒ–ä¸ºå•ä½çŸ©é˜µ
 
-	// 1. Æ½ÒÆµ½Ô­µã (½«Ğı×ªÖĞĞÄÒÆµ½Ô­µã)
+	// 1. å¹³ç§»åˆ°åŸç‚¹ (å°†æ—‹è½¬ä¸­å¿ƒç§»åˆ°åŸç‚¹)
 	transform = glm::translate(transform, glm::dvec3(-cx, -cy, 0.0));
 
-	// 2. ÈÆZÖáĞı×ª (ÄæÊ±ÕëÎªÕı)
+	// 2. ç»•Zè½´æ—‹è½¬ (é€†æ—¶é’ˆä¸ºæ­£)
 	transform = glm::rotate(transform, glm::radians(angle), glm::dvec3(0.0, 0.0, 1.0));
 
-	// 3. Æ½ÒÆ»ØÔ­Î»ÖÃ
+	// 3. å¹³ç§»å›åŸä½ç½®
 	transform = glm::translate(transform, glm::dvec3(cx, cy, 0.0));
 
-	// Ó¦ÓÃ±ä»»µ½ËùÓĞµã
+	// åº”ç”¨å˜æ¢åˆ°æ‰€æœ‰ç‚¹
 	for (auto& point : mPoints) {
-		// ½«µã×ª»»ÎªÆë´Î×ø±ê (w=1)
+		// å°†ç‚¹è½¬æ¢ä¸ºé½æ¬¡åæ ‡ (w=1)
 		glm::dvec4 transformed = transform * glm::dvec4(point, 1.0);
 
-		// ¸üĞÂµã×ø±ê (³ıÒÔw·ÖÁ¿£¬ËäÈ»ÕâÀïw=1²»ĞèÒª³ı)
+		// æ›´æ–°ç‚¹åæ ‡ (é™¤ä»¥wåˆ†é‡ï¼Œè™½ç„¶è¿™é‡Œw=1ä¸éœ€è¦é™¤)
 		point = glm::dvec3(transformed.x, transformed.y, point.z);
+	}
+}
+
+
+void CGPolylineSegment::Scale(double sx, double sy, double cx, double cy)
+{
+	// 1. åˆ›å»ºå¹³ç§»çŸ©é˜µï¼ˆå°†ä¸­å¿ƒç‚¹ç§»åŠ¨åˆ°åŸç‚¹ï¼‰
+	glm::dmat4 translateToOrigin = glm::translate(glm::dmat4(1.0), glm::dvec3(-cx, -cy, 0.0));
+
+	// 2. åˆ›å»ºç¼©æ”¾çŸ©é˜µ
+	glm::dmat4 scaleMatrix = glm::scale(glm::dmat4(1.0), glm::dvec3(sx, sy, 1.0));
+
+	// 3. åˆ›å»ºåå‘å¹³ç§»çŸ©é˜µï¼ˆå°†ä¸­å¿ƒç‚¹ç§»å›åŸä½ç½®ï¼‰
+	glm::dmat4 translateBack = glm::translate(glm::dmat4(1.0), glm::dvec3(cx, cy, 0.0));
+
+	// 4. ç»„åˆå˜æ¢çŸ©é˜µï¼šTâ»Â¹ * S * T
+	glm::dmat4 transformMatrix = translateBack * scaleMatrix * translateToOrigin;
+
+	// 5. åº”ç”¨å˜æ¢åˆ°æ‰€æœ‰ç‚¹
+	for (auto& point : mPoints) {
+		glm::dvec4 transformedPoint = transformMatrix * glm::dvec4(point, 1.0);
+		point = glm::dvec3(transformedPoint);
 	}
 }

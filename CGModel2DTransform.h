@@ -8,7 +8,14 @@
 class CGModel2DTransform : public UIEventHandler
 {
 public:
-    CGModel2DTransform(CGNode* node, GLFWwindow* window = nullptr);
+    CGModel2DTransform(
+        CGNode* node,
+        GLFWwindow* window,
+        bool isScaleX = false,    
+        bool isScaleY = false,    
+        glm::vec3 pivotPoint = glm::vec3(0.0f), 
+        bool showPivot = false    
+    );
     ~CGModel2DTransform();
 
     virtual EventType GetType() override; 
@@ -26,6 +33,8 @@ protected:
     bool mIsDragging;
     bool mIsRotating;
     bool mShowPivot;
+    bool mIsScaleX;
+    bool mIsScaleY;
     glm::dvec2 mLastCursorPos;
 
     const double M_PI = 3.1415926;

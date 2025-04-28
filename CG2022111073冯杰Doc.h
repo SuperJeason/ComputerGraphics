@@ -76,4 +76,7 @@ public:
 	afx_msg void OnTranslateDown();
 	afx_msg void OnRotateR();
 	afx_msg void OnRotateL();
+	afx_msg void OnScaleX();
+	afx_msg void OnScaleY();
+	afx_msg void OnScaleXy();
 };

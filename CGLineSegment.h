@@ -13,6 +13,7 @@ public:
 	virtual bool Render(CGRenderContext* pRC, CGCamera* pCamera);
 	void Translate(float tx, float ty); //Æ½ÒÆ
 	virtual void Rotate(double angle, double cx, double cy);
+	virtual void Scale(double sx, double sy, double cx, double cy);
 protected:
 	glm::dvec3 mStart;
 	glm::dvec3 mEnd;

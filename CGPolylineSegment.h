@@ -41,6 +41,8 @@ public:
 
 	virtual void Rotate(double angle, double cx, double cy);
 
+	virtual void Scale(double sx, double sy,double cx, double cy);
+
 protected:
 	std::vector<glm::dvec3> mPoints; // 存储折线上的点
 	bool mClosed; // 标记折线是否闭合（首尾相连）

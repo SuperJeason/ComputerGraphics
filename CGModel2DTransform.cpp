@@ -4,12 +4,27 @@
 #include "CG2022111073冯杰Doc.h" // 包含View之前要包含Doc
 #include "CG2022111073冯杰View.h" // 用户交互绘制，并将图形对象通过Doc添加到场景
 #include <iostream>
-CGModel2DTransform::CGModel2DTransform(CGNode* node, GLFWwindow* window)
-	:UIEventHandler(window), mNode(node), mPivotPoint(0.0f), mIsRotating(false), mLastCursorPos(0.0)
+CGModel2DTransform::CGModel2DTransform(
+	CGNode* node,
+	GLFWwindow* window,
+	bool isScaleX,
+	bool isScaleY,
+	glm::vec3 pivotPoint,
+	bool showPivot
+) : UIEventHandler(window),
+mNode(node),
+mIsScaleX(isScaleX),
+mIsScaleY(isScaleY),
+mPivotPoint(pivotPoint),
+mShowPivot(showPivot),
+mIsRotating(false),      // 固定默认值
+mLastCursorPos(0.0),
+mIsDragging(false)
 {
 	if (window) {
 		double x, y;
 		glfwGetCursorPos(window, &x, &y);
+		glfwFocusWindow(window);
 		mLastCursorPos = glm::dvec2(x, y);
 	}
 }
@@ -137,7 +152,30 @@ int CGModel2DTransform::OnCursorPos(GLFWwindow* window, double xpos, double ypos
 
 int CGModel2DTransform::OnMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
 {
-	return 1;
+	// 检查是否按下 Ctrl 键
+	CCG2022111073冯杰View* view = (CCG2022111073冯杰View*)glfwGetWindowUserPointer(window);
+	if (!view) return 0;
+	bool isCtrlPressed = (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ||
+		glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS);
+	if (isCtrlPressed && mNode != nullptr)
+	{
+		// 计算缩放因子（滚轮向上放大，向下缩小）
+		double scaleFactor = (yoffset > 0) ? 1.1 : 0.9; // 10% 缩放
+
+		// 直接调用节点的Scale方法
+		mNode->Scale(
+			mIsScaleX ? scaleFactor : 1.0,
+			mIsScaleY ? scaleFactor : 1.0,
+			mPivotPoint.x,
+			mPivotPoint.y
+		);
+		view->ShowPrompt("已实现缩放！");
+		view->Invalidate();
+		view->UpdateWindow();
+
+		return 1; // 事件已处理
+	}
+	return 0; // 事件未处理
 }
 
 int CGModel2DTransform::Cancel(GLFWwindow* window)

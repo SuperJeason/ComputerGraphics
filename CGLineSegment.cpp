@@ -1,4 +1,6 @@
-#include "pch.h"
+ï»¿#include "pch.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "CGLineSegment.h"
 IMPLEMENT_SERIAL(CGLineSegment, CGGeometry, 1)
 CGLineSegment::CGLineSegment()
@@ -14,23 +16,23 @@ CGLineSegment::~CGLineSegment()
 }
 void CGLineSegment::Serialize(CArchive& ar)
 {
-	CGRenderable::Serialize(ar); //ÏÈµ÷ÓÃ»ùÀàµÄĞòÁĞ»¯º¯Êı£¬ÔÙĞòÁĞ»¯×Ô¼ºµÄ³ÉÔ±£¨¸ù¾İĞèÒª£©
-	if (ar.IsStoring()) //±£´æ
+	CGRenderable::Serialize(ar); //å…ˆè°ƒç”¨åŸºç±»çš„åºåˆ—åŒ–å‡½æ•°ï¼Œå†åºåˆ—åŒ–è‡ªå·±çš„æˆå‘˜ï¼ˆæ ¹æ®éœ€è¦ï¼‰
+	if (ar.IsStoring()) //ä¿å­˜
 	{
-		//ar << ; //±£´æ×ÔÉíĞèÒª±£´æµÄÊı¾İ³ÉÔ±¡£<<ÔËËã·ûÖ§³ÖµÄÀàĞÍ²éÔÄCArchiveÊ¹ÓÃËµÃ÷
+		//ar << ; //ä¿å­˜è‡ªèº«éœ€è¦ä¿å­˜çš„æ•°æ®æˆå‘˜ã€‚<<è¿ç®—ç¬¦æ”¯æŒçš„ç±»å‹æŸ¥é˜…CArchiveä½¿ç”¨è¯´æ˜
 	}
-	else //¶ÁÈ¡
+	else //è¯»å–
 	{
 		//ar >> ;
 	}
 }
-//äÖÈ¾
+//æ¸²æŸ“
 bool CGLineSegment::Render(CGRenderContext* pRC, CGCamera* pCamera)
 {
 
 	if (pRC == nullptr || pCamera == nullptr)
 		return false;
-	glColor3f(1.0f, 1.0f, 1.0f); // °×É«
+	glColor3f(1.0f, 1.0f, 1.0f); // ç™½è‰²
 	glBegin(GL_LINES);
 	glVertex3f(mStart.x, mStart.y, mStart.z);
 	glVertex3f(mEnd.x, mEnd.y, mEnd.z);
@@ -49,26 +51,51 @@ void CGLineSegment::Translate(float tx, float ty)
 
 void CGLineSegment::Rotate(double angle, double cx, double cy)
 {
-	// ½«½Ç¶È×ª»»Îª»¡¶È£¨ÒòÎªÈı½Çº¯ÊıÊ¹ÓÃ»¡¶È£©
+	// å°†è§’åº¦è½¬æ¢ä¸ºå¼§åº¦ï¼ˆå› ä¸ºä¸‰è§’å‡½æ•°ä½¿ç”¨å¼§åº¦ï¼‰
 	double radians = angle * (M_PI / 180.0);
 
-	// ¼ÆËãĞı×ª¾ØÕóµÄÔªËØ
+	// è®¡ç®—æ—‹è½¬çŸ©é˜µçš„å…ƒç´ 
 	double cosTheta = cos(radians);
 	double sinTheta = sin(radians);
 
-	// ´´½¨Ğı×ª¾ØÕó
+	// åˆ›å»ºæ—‹è½¬çŸ©é˜µ
 	glm::mat2 rotationMatrix(cosTheta, sinTheta, -sinTheta, cosTheta);
 
-	// ¶ÔÆğµã½øĞĞĞı×ª
+	// å¯¹èµ·ç‚¹è¿›è¡Œæ—‹è½¬
 	glm::dvec2 startRel = glm::dvec2(mStart.x - cx, mStart.y - cy);
 	glm::dvec2 rotatedStart = rotationMatrix * startRel;
 	mStart.x = rotatedStart.x + cx;
 	mStart.y = rotatedStart.y + cy;
 
-	// ¶ÔÖÕµã½øĞĞĞı×ª
+	// å¯¹ç»ˆç‚¹è¿›è¡Œæ—‹è½¬
 	glm::dvec2 endRel = glm::dvec2(mEnd.x - cx, mEnd.y - cy);
 	glm::dvec2 rotatedEnd = rotationMatrix * endRel;
 	mEnd.x = rotatedEnd.x + cx;
 	mEnd.y = rotatedEnd.y + cy;
 }
+
+void CGLineSegment::Scale(double sx, double sy, double cx, double cy)
+{
+	// 1. åˆ›å»ºå¹³ç§»çŸ©é˜µï¼ˆå°†ç¼©æ”¾ä¸­å¿ƒç‚¹ç§»åŠ¨åˆ°åŸç‚¹ï¼‰
+	glm::dmat4 translateToOrigin = glm::translate(glm::dmat4(1.0), glm::dvec3(-cx, -cy, 0.0));
+
+	// 2. åˆ›å»ºç¼©æ”¾çŸ©é˜µ
+	glm::dmat4 scaleMatrix = glm::scale(glm::dmat4(1.0), glm::dvec3(sx, sy, 1.0));
+
+	// 3. åˆ›å»ºåå‘å¹³ç§»çŸ©é˜µï¼ˆå°†ä¸­å¿ƒç‚¹ç§»å›åŸä½ç½®ï¼‰
+	glm::dmat4 translateBack = glm::translate(glm::dmat4(1.0), glm::dvec3(cx, cy, 0.0));
+
+	// 4. ç»„åˆå˜æ¢çŸ©é˜µï¼šTâ»Â¹ * S * T
+	glm::dmat4 transformMatrix = translateBack * scaleMatrix * translateToOrigin;
+
+	// 5. å¯¹èµ·ç‚¹å’Œç»ˆç‚¹åº”ç”¨å˜æ¢
+	glm::dvec4 transformedStart = transformMatrix * glm::dvec4(mStart, 1.0);
+	glm::dvec4 transformedEnd = transformMatrix * glm::dvec4(mEnd, 1.0);
+
+	// 6. æ›´æ–°çº¿æ®µç«¯ç‚¹
+	mStart = glm::dvec3(transformedStart);
+	mEnd = glm::dvec3(transformedEnd);
+}
+
+
 
