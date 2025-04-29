@@ -1,98 +1,87 @@
-# Visual Studio文件
-.vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-*.vcxproj.filters
-ipch/
+# src目录下的忽略规则
+src/.vs/
+src/*.suo
+src/*.user
+src/*.userosscache
+src/*.sln.docstates
+src/*.vcxproj.filters
+src/ipch/
 
-# 编译输出目录
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
+src/[Dd]ebug/
+src/[Rr]elease/
+src/x64/
+src/x86/
+src/[Aa][Rr][Mm]/
+src/[Aa][Rr][Mm]64/
+src/bld/
+src/[Bb]in/
+src/[Oo]bj/
+src/[Ll]og/
+src/[Ll]ogs/
 
-# 预编译头文件
-*.gch
-*.pch
+src/*.gch
+src/*.pch
 
-# Visual C++ 缓存文件
-ipch/
-*.aps
-*.ncb
-*.opendb
-*.opensdf
-*.sdf
-*.cachefile
-*.VC.db
-*.VC.VC.opendb
+src/ipch/
+src/*.aps
+src/*.ncb
+src/*.opendb
+src/*.opensdf
+src/*.sdf
+src/*.cachefile
+src/*.VC.db
+src/*.VC.VC.opendb
 
-# Visual Studio配置文件夹
-.vs/
+src/.vs/
 
-# Visual Studio性能工具
-*.psess
-*.vsp
-*.vspx
-*.sap
+src/*.psess
+src/*.vsp
+src/*.vspx
+src/*.sap
 
-# Visual Studio调试文件
-*.ilk
-*.meta
-*.obj
-*.iobj
-*.pdb
-*.ipdb
-*.pgc
-*.pgd
-*.rsp
-*.sbr
-*.tlb
-*.tli
-*.tlh
-*.tmp
-*.tmp_proj
-*_wpftmp.csproj
-*.log
-*.vspscc
-*.vssscc
-.builds
-*.pidb
-*.svclog
-*.scc
+src/*.ilk
+src/*.meta
+src/*.obj
+src/*.iobj
+src/*.pdb
+src/*.ipdb
+src/*.pgc
+src/*.pgd
+src/*.rsp
+src/*.sbr
+src/*.tlb
+src/*.tli
+src/*.tlh
+src/*.tmp
+src/*.tmp_proj
+src/*_wpftmp.csproj
+src/*.log
+src/*.vspscc
+src/*.vssscc
+src/.builds
+src/*.pidb
+src/*.svclog
+src/*.scc
 
-# 系统文件
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-*.lnk
+src/Thumbs.db
+src/ehthumbs.db
+src/Desktop.ini
+src/$RECYCLE.BIN/
+src/*.lnk
 
-# Windows临时文件
-~$*
-*~
-*.bak
-*.swp
+src/~$*
+src/*~
+src/*.bak
+src/*.swp
 
-# 其他常见文件格式
-*.exe
-*.dll
-*.so
-*.dylib
-*.lib
-*.a
-*.out
-*.app
+src/*.exe
+src/*.dll
+src/*.so
+src/*.dylib
+src/*.lib
+src/*.a
+src/*.out
+src/*.app
 
-# 项目特定忽略（根据需要自定义）
-# 例如：生成的文档、特定的日志文件等 
-
-readme.txt
+# 项目特定忽略
+src/readme.txt
