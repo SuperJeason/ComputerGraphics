@@ -94,6 +94,7 @@ int CGModel2DTransform::OnCursorPos(GLFWwindow* window, double xpos, double ypos
 	glm::dvec3 lastPosDCS(mLastCursorPos.x, mLastCursorPos.y, 0.0);
 	glm::dvec3 lastPosWCS = view->DCS2WCS(lastPosDCS);
 
+
 	double currentDx = currentPosWCS.x - mPivotPoint.x;
 	double currentDy = currentPosWCS.y - mPivotPoint.y;
 	double currentAngle = atan2(currentDy, currentDx);
@@ -113,11 +114,17 @@ int CGModel2DTransform::OnCursorPos(GLFWwindow* window, double xpos, double ypos
 		deltaAngleByPosition += 2.0 * M_PI;
 	}
 
+	//std::string coordText = "旋转角度: (" + std::to_string(deltaAngleByPosition) + "），下次角度:( + std::to_string(deltaAngleByDistance) + )";
+	//view->ShowPrompt(coordText.c_str());
+
 	// 屏幕坐标位移
 	double dx = xpos - mLastCursorPos.x;
 	double dy = ypos - mLastCursorPos.y;
-	if (deltaAngleByPosition * dx < 0)
+	if (deltaAngleByPosition * dx > 0)
 		dx = -dx;
+
+	//std::string coordText = "旋转角度: (" + std::to_string(deltaAngleByPosition) + "），下次角度:(" + std::to_string(dx) + ")";
+	//view->ShowPrompt(coordText.c_str());
 
 
 	// 【改正】用 dx 带方向
@@ -130,11 +137,12 @@ int CGModel2DTransform::OnCursorPos(GLFWwindow* window, double xpos, double ypos
 	// 平滑
 	const double smoothingFactor = 0.8;
 	deltaAngle *= smoothingFactor;
-
+	deltaAngle = -deltaAngle;
 	// 显示
 	/*std::string coordText = "旋转角度: (" + std::to_string(deltaAngle) + "），下次角度:(" + std::to_string(deltaAngleByDistance) + ")";
 	view->ShowPrompt(coordText.c_str());*/
-
+	std::string coordText = "旋转中心: (" + std::to_string(mPivotPoint.x) + std::to_string(mPivotPoint.y) + "），旋转角度:(" + std::to_string(deltaAngle) + ")";
+	view->ShowPrompt(coordText.c_str());
 	// 旋转
 	mNode->Rotate(deltaAngle, mPivotPoint.x, mPivotPoint.y);
 
