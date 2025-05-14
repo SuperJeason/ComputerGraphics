@@ -26,5 +26,30 @@ bool CGRenderable::Render(CGRenderContext* pRC, CGCamera* pCamera)
 {
 	if (pRC == nullptr || pCamera == nullptr)
 		return false;
+	if (getRenderStateSet()) {
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+		getRenderStateSet()->apply(pCamera, pRC);
+	}
+	if (isDisplayListEnabled()) { //使用显示列表
+		if (displayListDirty()) {
+			if (!displayList()) {
+				setDisplayList(glGenLists(1));
+			}
+			assert(displayList());
+			glNewList(displayList(), GL_COMPILE_AND_EXECUTE);
+			buildDisplayList();
+			glEndList();
+			setDisplayListDirty(false);
+		}
+		else {
+			assert(displayList());
+			glCallList(displayList());
+		}
+	}
+	else {
+	}
+	if (getRenderStateSet()) {
+		glPopAttrib();
+	}
 	return true;
 }

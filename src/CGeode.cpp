@@ -25,10 +25,18 @@ bool CGGeode::Render(CGRenderContext * pRC, CGCamera * pCamera)
 {
 	if (pRC == nullptr || pCamera == nullptr)
 		return false;
+	if (getRenderStateSet()) {
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+		getRenderStateSet()->apply(pCamera, pRC);
+	}
 	for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr)
 	{
 		(*itr)->Render(pRC, pCamera);
 	}
+	if (getRenderStateSet()) {
+		glPopAttrib();
+	}
+	return true;
 }
 
 unsigned int CGGeode::GetNumRenderables() const

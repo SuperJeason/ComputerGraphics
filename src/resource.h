@@ -22,6 +22,11 @@
 #define IDR_WINDOWS_MENU                152
 #define IDS_EDIT_MENU                   306
 #define IDR_RIBBON                      307
+#define IDD_INPUT_SLICE                 314
+#define IDCANCEL                        1001
+#define IDC_INPUT_SLICE                 1002
+#define IDC_INPUT_SLICE2                1003
+#define IDC_INPUT_STACK                 1003
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_DRAW2d_LINESEG               32772
 #define ID_DRAW2D_POLYGON               32773
@@ -41,9 +46,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
+#define _APS_NEXT_RESOURCE_VALUE        316
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

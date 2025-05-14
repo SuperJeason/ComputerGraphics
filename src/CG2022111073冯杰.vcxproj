@@ -195,6 +195,7 @@
     <ClInclude Include="CG2022111073冯杰Doc.h" />
     <ClInclude Include="CG2022111073冯杰View.h" />
     <ClInclude Include="CGCamera.h" />
+    <ClInclude Include="CGCube.h" />
     <ClInclude Include="CGDraw2DLineSeg.h" />
     <ClInclude Include="CGDraw2DPolylineSegment.h" />
     <ClInclude Include="CGGeode.h" />
@@ -206,7 +207,10 @@
     <ClInclude Include="CGObject.h" />
     <ClInclude Include="CGPolylineSegment.h" />
     <ClInclude Include="CGRenderable.h" />
+    <ClInclude Include="CGRenderState.h" />
     <ClInclude Include="CGScene.h" />
+    <ClInclude Include="CGSphere.h" />
+    <ClInclude Include="CGSphereInput.h" />
     <ClInclude Include="CGTransform.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="glIncludes.h" />
@@ -217,6 +221,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TessellationHints.h" />
     <ClInclude Include="UIEventHandler.h" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +231,7 @@
     <ClCompile Include="CG2022111073冯杰Doc.cpp" />
     <ClCompile Include="CG2022111073冯杰View.cpp" />
     <ClCompile Include="CGCamera.cpp" />
+    <ClCompile Include="CGCube.cpp" />
     <ClCompile Include="CGDraw2DLineSeg.cpp" />
     <ClCompile Include="CGDraw2DPolylineSegment.cpp" />
     <ClCompile Include="CGeode.cpp" />
@@ -237,7 +243,10 @@
     <ClCompile Include="CGObject.cpp" />
     <ClCompile Include="CGPolylineSegment.cpp" />
     <ClCompile Include="CGRenderable.cpp" />
+    <ClCompile Include="CGRenderState.cpp" />
     <ClCompile Include="CGScene.cpp" />
+    <ClCompile Include="CGSphere.cpp" />
+    <ClCompile Include="CGSphereInput.cpp" />
     <ClCompile Include="CGTransform.cpp" />
     <ClCompile Include="homework1.cpp" />
     <ClCompile Include="homework2.cpp" />

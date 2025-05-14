@@ -6,6 +6,8 @@
 IMPLEMENT_SERIAL(CGScene, CGObject, 1)
 CGScene::CGScene()
 {
+	SetMainCamera(std::make_shared<CGCamera>());
+	SetSceneData(std::make_shared<CGTransform>());
 }
 CGScene::~CGScene()
 {
@@ -37,6 +39,8 @@ bool CGScene::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	//相机投影
 	//pCamera->Projection(pCamera->ProjectionMode());
 	//绘制
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
 	mRoot->Render(pRC, pCamera);
 	DrawWCS(pCamera);
 }

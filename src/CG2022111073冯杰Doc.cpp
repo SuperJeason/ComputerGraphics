@@ -41,6 +41,10 @@
 #include "CGDraw2DPolylineSegment.h"
 #include "CCGSceneGraphView.h"
 #include "CGModel2DTransform.h"
+#include "CGCube.h"
+#include "TessellationHints.h"
+#include "CGSphere.h"
+#include "CGSphereInput.h"
 // CCG2022111073冯杰Doc
 
 IMPLEMENT_DYNCREATE(CCG2022111073冯杰Doc, CDocument)
@@ -75,7 +79,81 @@ CCG2022111073冯杰Doc::CCG2022111073冯杰Doc() noexcept
 	auto g = std::make_shared<CGTransform>();
 	//g->AddChild(e);
 	mScene->SetSceneData(g);
+	//长方体（模型）
+	//长方体（模型）
+	auto c = std::make_shared<CGCube>();
+	auto h = std::make_shared<TessellationHints>();
+	c->setTessellationHints(h);
+	c->setDisplayListEnabled(true);
+	//右长方体实例节点
+	auto t1 = std::make_shared<CGTransform>(); //实列组节点
+	auto e1 = std::make_shared<CGGeode>(); //实列叶节点
+	auto color1 = std::make_shared<CGColor>(); //属性
+	color1->setValue(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)); //黄色
+	e1->gocRenderStateSet()->setRenderState(color1, -1); //设置节点属性
+	t1->translate(100, -100, 0);
+	t1->rotate(45, 1, 1, 1);
+	t1->scale(100, 100, 100);
+	e1->AddChild(c);
+	t1->AddChild(e1);
+	mScene->GetSceneData()->asGroup()->AddChild(t1);
+	//左长方体节点
+	auto t2 = std::make_shared<CGTransform>(); //实列组节点
+	auto e2 = std::make_shared<CGGeode>(); //实列叶节点
+	auto color2 = std::make_shared<CGColor>(); //属性
+	color2->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); //蓝色
+	e2->gocRenderStateSet()->setRenderState(color2, -1); //设置节点属性
+	auto p = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式
+	e2->gocRenderStateSet()->setRenderState(p, -1); //设置节点属性
+	t2->translate(-100, -100, 0);
+	t2->rotate(45, 1, 1, 1);
+	t2->scale(100, 100, 100);
+	e2->AddChild(c);
+	t2->AddChild(e2);
+	mScene->GetSceneData()->asGroup()->AddChild(t2);
+	 //创建共享的球体几何体
 
+	CGSphereInput dlg;
+	dlg.mTitle = _T("请输入Slice和Stack"); //根据需要设置对话框标题
+	if (dlg.DoModal() == IDOK) //对话框中点击了【确定】按钮，取回输入的数据
+	{ //根据实际需要使用输入的数据
+	//假如输入的是数值，则将字符串转换为数值
+		double slice = _ttof(dlg.mValueSlice);
+		double stack = _ttof(dlg.mValueStack);
+		//
+		//此处只显示输入的数据，实际应根据获取的值作相应的处理
+		//AfxMessageBox(dlg.mValueSlice);
+
+		auto sphere = std::make_shared<CGSphere>(100.0f);
+		auto hints = std::make_shared<TessellationHints>();
+		hints->setTargetSlices(slice); // 提高细分精度
+		hints->setTargetStacks(stack);
+		sphere->setTessellationHints(hints);
+		sphere->setDisplayListEnabled(true);
+		auto t1 = std::make_shared<CGTransform>();
+		auto e1 = std::make_shared<CGGeode>();
+		auto color1 = std::make_shared<CGColor>();
+		color1->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); //蓝色 
+		e1->gocRenderStateSet()->setRenderState(color1, -1);
+		t1->translate(100, 100, 0);
+		e1->AddChild(sphere);
+		t1->AddChild(e1);
+		mScene->GetSceneData()->asGroup()->AddChild(t1);
+
+		auto t2 = std::make_shared<CGTransform>();
+		auto e2 = std::make_shared<CGGeode>();
+		auto color2 = std::make_shared<CGColor>();
+		color2->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); 
+		auto polygonMode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE);    
+		e2->gocRenderStateSet()->setRenderState(color2, -1);
+		e2->gocRenderStateSet()->setRenderState(polygonMode, -1);
+		t2->translate(-100, 100, 0);
+		t2->rotate(45, 1, 1, 1);
+		e2->AddChild(sphere);
+		t2->AddChild(e2);
+		mScene->GetSceneData()->asGroup()->AddChild(t2);
+
+	}
 }
 
 CCG2022111073冯杰Doc::~CCG2022111073冯杰Doc()
@@ -208,7 +286,7 @@ void CCG2022111073冯杰Doc::OnDraw2dLineseg()
 void CCG2022111073冯杰Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
-	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==EventType::Draw2DLineSeg);
+	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() == EventType::Draw2DLineSeg);
 }
 
 bool CCG2022111073冯杰Doc::RenderScene(CGRenderContext* pRC)
@@ -277,10 +355,10 @@ CCGSceneGraphView* CCG2022111073冯杰Doc::GetSceneGraphView()
 	while (pos != NULL)
 	{
 		CView* pView = GetNextView(pos);
-			if (pView->IsKindOf(RUNTIME_CLASS(CCGSceneGraphView))) {
-				CCGSceneGraphView* view = dynamic_cast<CCGSceneGraphView*>(pView);
-				return view;
-			}
+		if (pView->IsKindOf(RUNTIME_CLASS(CCGSceneGraphView))) {
+			CCGSceneGraphView* view = dynamic_cast<CCGSceneGraphView*>(pView);
+			return view;
+		}
 	}
 	return nullptr;
 }
@@ -389,7 +467,7 @@ void CCG2022111073冯杰Doc::OnTranslateLeft()
 	if (UIEventHandler::CurCommand()) {
 		UIEventHandler::DelCommand();
 	}
-	
+
 	if (view != nullptr) {
 		// UIEventHandler::SetCommand(new CGModel2DTransform((CGRenderable*)pTree->GetItemData(mSelectedItem),view->glfwWindow())); 
 		CGGeode* renderable = (CGGeode*)pTree->GetItemData(mSelectedItem);
@@ -398,13 +476,13 @@ void CCG2022111073冯杰Doc::OnTranslateLeft()
 			return;
 		}
 		CGNode* child = renderable->GetChild(0);
-		if (!child) { 
+		if (!child) {
 			AfxMessageBox(_T("请先选择需要移动的子节点！"));
-			return; 
+			return;
 		}
 		// 直接应用向左平移变换（每次移动10个单位）
 		const float translateAmount = -10.0f; // 负值表示向左移动
-		child->Translate(translateAmount,0);
+		child->Translate(translateAmount, 0);
 		// 更新所有视图
 		UpdateAllViews(NULL);
 
@@ -616,7 +694,7 @@ void CCG2022111073冯杰Doc::OnRotateL()
 	// 如果找到了视图，创建并设置绘制折线段的命令对象
 	if (view != nullptr) {
 		// 使用新的 CGDraw2DPolylineSegment 类
-		UIEventHandler::SetCommand(new CGModel2DTransform(child,view->glfwWindow())); //创建绘制折线的命令对象
+		UIEventHandler::SetCommand(new CGModel2DTransform(child, view->glfwWindow())); //创建绘制折线的命令对象
 		UpdateAllViews(NULL);
 	}
 }
@@ -727,7 +805,7 @@ void CCG2022111073冯杰Doc::OnScaleXy()
 	// 如果找到了视图，创建并设置绘制折线段的命令对象
 	if (view != nullptr) {
 		// 使用新的 CGDraw2DPolylineSegment 类
-		UIEventHandler::SetCommand(new CGModel2DTransform(child, view->glfwWindow(),true,true)); //创建绘制折线的命令对象
+		UIEventHandler::SetCommand(new CGModel2DTransform(child, view->glfwWindow(), true, true)); //创建绘制折线的命令对象
 		UpdateAllViews(NULL);
 	}
 }

@@ -21,5 +21,27 @@ public:
     // 类型转换
     virtual CGRenderable* asRenderable() { return this; }
     virtual const CGRenderable* asRenderable() const { return this; }
-
+protected:
+    bool mDisplayListEnabled = false;
+    bool mDisplayListDirty = true;
+    GLuint mDisplayList = 0;
+protected:
+    CGRenderable(const CGRenderable& other) : CGNode(other)
+    {
+    }
+    CGRenderable& operator=(const CGRenderable&) = default;
+    virtual void buildDisplayList() {} //派生类中重写
+public:
+    bool isDisplayListEnabled() const { return mDisplayListEnabled; }
+    void setDisplayListEnabled(bool enabled) { mDisplayListEnabled = enabled; }
+    bool displayListDirty() const { return mDisplayListDirty; }
+    void setDisplayListDirty(bool dirty) { mDisplayListDirty = dirty; }
+    GLuint displayList() const { return mDisplayList; }
+    void setDisplayList(unsigned int disp_list) { mDisplayList = disp_list; }
+    void deleteDisplayList()
+    {
+        if (displayList())
+            glDeleteLists(displayList(), 1);
+        mDisplayList = 0;
+    }
 };

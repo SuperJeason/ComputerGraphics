@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #else
 #include <GLAD/glad.h>
+#include <GL/glext.h>
 #endif
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
