@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰View, CView)
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_SIZE()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CCG2022111073冯杰View 构造/析构
@@ -56,6 +57,7 @@ CCG2022111073冯杰View::CCG2022111073冯杰View() noexcept
 
 CCG2022111073冯杰View::~CCG2022111073冯杰View()
 {
+	if (mTimer) KillTimer(mTimer); //关闭定时器
 	if (m_glfwWindow) {
 		glfwDestroyWindow(m_glfwWindow);
 		glfwTerminate();
@@ -424,5 +426,25 @@ bool CCG2022111073冯杰View::AddRenderable(std::shared_ptr<CGNode> r) const
 }
 
 
+UINT CCG2022111073冯杰View::toggleFrameTimer()
+{
+	if (!mTimer) {
+		mTimer = SetTimer(1, 20, NULL);// 启动50FPS定时器（20毫秒间隔）
+	}
+	else {
+		KillTimer(mTimer);
+		mTimer = 0;
+	}
+	return mTimer;
+}
 
 
+void CCG2022111073冯杰View::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (nIDEvent == mTimer) {
+		RenderScene();
+	}
+
+	__super::OnTimer(nIDEvent);
+}

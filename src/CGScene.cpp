@@ -33,7 +33,7 @@ void CGScene::SetSceneData(std::shared_ptr<CGNode> root)
 //渲染场景
 bool CGScene::Render(CGRenderContext* pRC, CGCamera* pCamera)
 {
-	if (pRC == nullptr || pCamera == nullptr)
+	if (mRoot == nullptr || pRC == nullptr || pCamera == nullptr)
 		return false;
 	//场景节点更新
 	//相机投影
@@ -41,8 +41,10 @@ bool CGScene::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	//绘制
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
+	mRoot->update();
 	mRoot->Render(pRC, pCamera);
 	DrawWCS(pCamera);
+	return true;
 }
 
 void CGScene::DrawWCS(CGCamera* pCamera)

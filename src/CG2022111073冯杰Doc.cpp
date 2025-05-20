@@ -45,6 +45,7 @@
 #include "TessellationHints.h"
 #include "CGSphere.h"
 #include "CGSphereInput.h"
+#include "RobotBodyTransformParam.h"
 // CCG2022111073冯杰Doc
 
 IMPLEMENT_DYNCREATE(CCG2022111073冯杰Doc, CDocument)
@@ -63,6 +64,8 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰Doc, CDocument)
 	ON_COMMAND(ID_SCALE_X, &CCG2022111073冯杰Doc::OnScaleX)
 	ON_COMMAND(ID_SCALE_Y, &CCG2022111073冯杰Doc::OnScaleY)
 	ON_COMMAND(ID_SCALE_XY, &CCG2022111073冯杰Doc::OnScaleXy)
+	ON_COMMAND(ID_BTN_TIMER, &CCG2022111073冯杰Doc::OnBtnTimer)
+	ON_UPDATE_COMMAND_UI(ID_BTN_TIMER, &CCG2022111073冯杰Doc::OnUpdateBtnTimer)
 END_MESSAGE_MAP()
 
 
@@ -113,47 +116,51 @@ CCG2022111073冯杰Doc::CCG2022111073冯杰Doc() noexcept
 	mScene->GetSceneData()->asGroup()->AddChild(t2);
 	 //创建共享的球体几何体
 
-	CGSphereInput dlg;
-	dlg.mTitle = _T("请输入Slice和Stack"); //根据需要设置对话框标题
-	if (dlg.DoModal() == IDOK) //对话框中点击了【确定】按钮，取回输入的数据
-	{ //根据实际需要使用输入的数据
-	//假如输入的是数值，则将字符串转换为数值
-		double slice = _ttof(dlg.mValueSlice);
-		double stack = _ttof(dlg.mValueStack);
-		//
-		//此处只显示输入的数据，实际应根据获取的值作相应的处理
-		//AfxMessageBox(dlg.mValueSlice);
+	//CGSphereInput dlg;
+	//dlg.mTitle = _T("请输入Slice和Stack"); //根据需要设置对话框标题
+	//if (dlg.DoModal() == IDOK) //对话框中点击了【确定】按钮，取回输入的数据
+	//{ //根据实际需要使用输入的数据
+	////假如输入的是数值，则将字符串转换为数值
+	//	double slice = _ttof(dlg.mValueSlice);
+	//	double stack = _ttof(dlg.mValueStack);
+	//	//
+	//	//此处只显示输入的数据，实际应根据获取的值作相应的处理
+	//	//AfxMessageBox(dlg.mValueSlice);
 
-		auto sphere = std::make_shared<CGSphere>(100.0f);
-		auto hints = std::make_shared<TessellationHints>();
-		hints->setTargetSlices(slice); // 提高细分精度
-		hints->setTargetStacks(stack);
-		sphere->setTessellationHints(hints);
-		sphere->setDisplayListEnabled(true);
-		auto t1 = std::make_shared<CGTransform>();
-		auto e1 = std::make_shared<CGGeode>();
-		auto color1 = std::make_shared<CGColor>();
-		color1->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); //蓝色 
-		e1->gocRenderStateSet()->setRenderState(color1, -1);
-		t1->translate(100, 100, 0);
-		e1->AddChild(sphere);
-		t1->AddChild(e1);
-		mScene->GetSceneData()->asGroup()->AddChild(t1);
+	//	auto sphere = std::make_shared<CGSphere>(100.0f);
+	//	auto hints = std::make_shared<TessellationHints>();
+	//	hints->setTargetSlices(slice); // 提高细分精度
+	//	hints->setTargetStacks(stack);
+	//	sphere->setTessellationHints(hints);
+	//	sphere->setDisplayListEnabled(true);
+	//	auto t1 = std::make_shared<CGTransform>();
+	//	auto e1 = std::make_shared<CGGeode>();
+	//	auto color1 = std::make_shared<CGColor>();
+	//	color1->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); //蓝色 
+	//	e1->gocRenderStateSet()->setRenderState(color1, -1);
+	//	t1->translate(100, 100, 0);
+	//	e1->AddChild(sphere);
+	//	t1->AddChild(e1);
+	//	mScene->GetSceneData()->asGroup()->AddChild(t1);
 
-		auto t2 = std::make_shared<CGTransform>();
-		auto e2 = std::make_shared<CGGeode>();
-		auto color2 = std::make_shared<CGColor>();
-		color2->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); 
-		auto polygonMode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE);    
-		e2->gocRenderStateSet()->setRenderState(color2, -1);
-		e2->gocRenderStateSet()->setRenderState(polygonMode, -1);
-		t2->translate(-100, 100, 0);
-		t2->rotate(45, 1, 1, 1);
-		e2->AddChild(sphere);
-		t2->AddChild(e2);
-		mScene->GetSceneData()->asGroup()->AddChild(t2);
+	//	auto t2 = std::make_shared<CGTransform>();
+	//	auto e2 = std::make_shared<CGGeode>();
+	//	auto color2 = std::make_shared<CGColor>();
+	//	color2->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); 
+	//	auto polygonMode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE);    
+	//	e2->gocRenderStateSet()->setRenderState(color2, -1);
+	//	e2->gocRenderStateSet()->setRenderState(polygonMode, -1);
+	//	t2->translate(-100, 100, 0);
+	//	t2->rotate(45, 1, 1, 1);
+	//	e2->AddChild(sphere);
+	//	t2->AddChild(e2);
+	//	mScene->GetSceneData()->asGroup()->AddChild(t2);
 
-	}
+	//}
+	std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+	std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+	t2->setUserData(data); //设置节点更新参数
+	t2->SetUpdateCallback(rc); //设置节点更新回调
 }
 
 CCG2022111073冯杰Doc::~CCG2022111073冯杰Doc()
@@ -808,4 +815,28 @@ void CCG2022111073冯杰Doc::OnScaleXy()
 		UIEventHandler::SetCommand(new CGModel2DTransform(child, view->glfwWindow(), true, true)); //创建绘制折线的命令对象
 		UpdateAllViews(NULL);
 	}
+}
+
+void CCG2022111073冯杰Doc::OnBtnTimer()
+{
+	// TODO: 在此添加命令处理程序代码
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	if (view != nullptr) {
+		mTimer = view->toggleFrameTimer();// 启动定时器
+	}
+}
+
+void CCG2022111073冯杰Doc::OnUpdateBtnTimer(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(mTimer != 0);
 }

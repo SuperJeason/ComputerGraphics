@@ -24,4 +24,7 @@ public:
 protected:
 	virtual ~CGGroup();
 	NodeList mChildren;
+
+public:
+	virtual void update() override;
 };

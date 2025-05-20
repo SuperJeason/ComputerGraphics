@@ -79,4 +79,10 @@ public:
 	afx_msg void OnScaleX();
 	afx_msg void OnScaleY();
 	afx_msg void OnScaleXy();
+
+protected:
+	UINT mTimer = 0; //定时器
+public:
+	afx_msg void OnBtnTimer();
+	afx_msg void OnUpdateBtnTimer(CCmdUI* pCmdUI);
 };

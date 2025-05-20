@@ -96,3 +96,15 @@ unsigned int CGGroup::GetChildIndex(const CGNode* node) const
 	}
 	return static_cast<unsigned int>(mChildren.size()); //没找到，返回子节点个数
 }
+
+void CGGroup::update()
+{
+	if (mUpdateCallback)
+		mUpdateCallback->run(this, userData());
+	for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr)
+	{
+		if ((*itr)->GetUpdateCallback()) {
+			(*itr)->GetUpdateCallback()->run((*itr).get(), (*itr)->userData());
+		}
+	}
+}

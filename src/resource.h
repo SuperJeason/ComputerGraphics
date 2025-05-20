@@ -31,7 +31,8 @@
 #define ID_DRAW2d_LINESEG               32772
 #define ID_DRAW2D_POLYGON               32773
 #define ID_BUTTON2                      32775
-#define ID_TRANSLATE_RIGHT              32775
+#define ID_TRANSLATE_RIGHT              32788
+#define ID_BTN_TIMER                    32789
 #define ID_TRANSLATE_LEFT               32776
 #define ID_TRANSLATE_UP                 32777
 #define ID_TRANSLATE_DOWN               32778
@@ -40,7 +41,7 @@
 #define ID_SCALE_X                      32781
 #define ID_SCALE_Y                      32783
 #define ID_BUTTON5                      32784
-#define ID_SCALE_XY                     32784
+#define ID_SCALE_XY                     32790
 
 // Next default values for new objects
 // 

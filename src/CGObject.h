@@ -24,7 +24,14 @@ public:
 	CString& Name() { return mName; }
 protected:
 	CString mName; //对象名称，默认由“类名+序号”构成，用于显示
-		static unsigned long sID; //对象ID，仅用于辅助对象命名，不能唯一标识
+	static unsigned long sID; //对象ID，仅用于辅助对象命名，不能唯一标识
+
+public:
+	const CGObject* userData() const { return mUserData.get(); }
+	CGObject* userData() { return mUserData.get(); }
+	void setUserData(std::shared_ptr<CGObject> user_data) { mUserData = user_data; }
+private:
+	std::shared_ptr<CGObject> mUserData = nullptr;
 };
 //回调，根据需要派生类定义回调行为（通过run运行）
 class CGCallback : public CGObject

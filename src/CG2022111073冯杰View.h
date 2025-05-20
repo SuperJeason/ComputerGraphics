@@ -76,6 +76,12 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+
+protected:
+	UINT mTimer = 0; //定时器
+public:
+	UINT toggleFrameTimer(); //触发/关闭定时器
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // CG2022111073冯杰View.cpp 中的调试版本
