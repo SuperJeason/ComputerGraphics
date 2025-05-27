@@ -1,7 +1,7 @@
 # 计算机图形学应用程序
 
 ## 展示
-![演示视频](http://s0.mall.tcl.com/group1/M00/00/8D/CvoHBGgPo2mALyyfAClF8vGrV6Y653.gif)
+![演示视频](https://cdn.wmpvp.com/steamWeb/C0FC37B8DF1247CAB888803BE6ADD4FD-1748359246753.gif)
 ![机器人原地跑步](https://cdn.wmpvp.com/steamWeb/DB8530E492CA45B091730CAE0B64DDC4-1748359028826.gif)
 ## 项目简介
 
