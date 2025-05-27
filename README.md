@@ -2,7 +2,7 @@
 
 ## 展示
 ![演示视频](http://s0.mall.tcl.com/group1/M00/00/8D/CvoHBGgPo2mALyyfAClF8vGrV6Y653.gif)
-
+![机器人原地跑步](https://cdn.wmpvp.com/steamWeb/DB8530E492CA45B091730CAE0B64DDC4-1748359028826.gif)
 ## 项目简介
 
 这是一个基于MFC和OpenGL的计算机图形学应用程序，实现了各种2D/3D图形渲染和交互功能。项目整合了多种计算机图形学算法和技术，主要用于计算机图形学教学和实验。
