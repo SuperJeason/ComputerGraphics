@@ -27,7 +27,8 @@ enum class EventType : int //操作命令类型，参考如下定义，可根据需要修改
 	Draw2DDiamond = 25, //菱形（左键第一点，第二点形成中心线，两个方向等）
 	Draw2DTriangle = 26, //三角形（不等边scalene, 等边equilateral,等腰isosceles）、直角三角形
 	Model2DTransform = 120,
-	EventUnknown = 2000
+	EventUnknown = 2000,
+	CameraControl = 2002
 };
 //与绘图客户区的交互，使用命令模式，简化CView派生类中键盘、鼠标事件的处理
 class UIEventHandler

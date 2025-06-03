@@ -42,6 +42,8 @@ bool CGScene::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	mRoot->update();
+	//相机投影
+	pCamera->Projection(pCamera->ProjectionMode());
 	mRoot->Render(pRC, pCamera);
 	DrawWCS(pCamera);
 	return true;

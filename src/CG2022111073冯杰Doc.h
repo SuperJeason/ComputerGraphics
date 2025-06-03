@@ -15,7 +15,7 @@
 
 #pragma once
 #include <memory>
-class CGScene;
+class CGScene;  // 前向声明
 class CGRenderContext;
 class CGNode;
 class CGGroup;
@@ -28,6 +28,10 @@ protected: // 仅从序列化创建
 
 public:
 	std::shared_ptr<CGScene> mScene = nullptr;
+
+public:
+	void OnViewResize(int cx, int cy);
+
 // 操作
 public:
 	bool RenderScene(CGRenderContext* pRC);
@@ -85,4 +89,6 @@ protected:
 public:
 	afx_msg void OnBtnTimer();
 	afx_msg void OnUpdateBtnTimer(CCmdUI* pCmdUI);
+
+	afx_msg void OnCameracontrol();
 };

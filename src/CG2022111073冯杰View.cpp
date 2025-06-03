@@ -356,27 +356,37 @@ BOOL CCG2022111073冯杰View::OnEraseBkgnd(CDC* pDC)
 void CCG2022111073冯杰View::OnSize(UINT nType, int cx, int cy)
 {
 	__super::OnSize(nType, cx, cy);
-
 	// TODO: 在此处添加消息处理程序代码
 	if (m_hWndGL) {
 		// 调整GLFW子窗口大小与视图客户区匹配
 		::SetWindowPos(m_hWndGL, NULL, 0, 0, cx, cy, SWP_NOZORDER);
 		glfwMakeContextCurrent(m_glfwWindow);
-		glViewport(0, 0, cx, cy);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		//基本图形生成算法实验部分，假定观察窗口与视口一致。（左下角为原点，右上角为(cx,cy)）
-		//使用正交平行投影
-		//glOrtho(0, cx, //x范围
-		//	0, cy, //y范围
-		//	-10000.0f, 10000.0f); //z范围（深度）
-		//glMatrixMode(GL_MODELVIEW);
-		glOrtho(-cx/2.0f, cx/2.0f, //x范围
-			-cy/2.0f, cy/2.0f, //y范围
-			-10000.0f, 10000.0f); //z范围（深度）
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-	}
+		//通过文档类操作相机
+		CCG2022111073冯杰Doc* pDoc = GetDocument();
+		ASSERT_VALID(pDoc);
+		if (pDoc) {
+			pDoc->OnViewResize(cx, cy);
+		}
+		else {
+			//+0
+			glViewport(0, 0, cx, cy);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			//
+			//基本图形生成算法实验部分，假定观察窗口与视口一致。（左下角为原点，右上角为(cx,cy)）
+			//使用正交平行投影
+			//glOrtho(0, cx, //x范围
+			// 0, cy, //y范围
+			// -10000.0f, 10000.0f); //z范围（深度）
+			//调到屏幕中心
+			glOrtho(-cx / 2.0f, cx / 2.0f, //x范围
+				-cy / 2.0f, cy / 2.0f, //y范围
+				-10000.0f, 10000.0f); //z范围（深度）
+			//
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+		}
+	} //
 }
 
 //状态栏上显示提示信息

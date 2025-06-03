@@ -189,6 +189,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraControl.h" />
     <ClInclude Include="CCGRenderContext.h" />
     <ClInclude Include="CCGSceneGraphView.h" />
     <ClInclude Include="CG2022111073冯杰.h" />
@@ -226,6 +227,7 @@
     <ClInclude Include="UIEventHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraControl.cpp" />
     <ClCompile Include="CCGRenderContext.cpp" />
     <ClCompile Include="CCGSceneGraphView.cpp" />
     <ClCompile Include="CG2022111073冯杰.cpp" />

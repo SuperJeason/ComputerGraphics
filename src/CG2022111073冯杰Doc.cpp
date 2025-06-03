@@ -46,6 +46,7 @@
 #include "CGSphere.h"
 #include "CGSphereInput.h"
 #include "RobotBodyTransformParam.h"
+#include "CameraControl.h"
 // CCG2022111073冯杰Doc
 
 IMPLEMENT_DYNCREATE(CCG2022111073冯杰Doc, CDocument)
@@ -66,6 +67,7 @@ BEGIN_MESSAGE_MAP(CCG2022111073冯杰Doc, CDocument)
 	ON_COMMAND(ID_SCALE_XY, &CCG2022111073冯杰Doc::OnScaleXy)
 	ON_COMMAND(ID_BTN_TIMER, &CCG2022111073冯杰Doc::OnBtnTimer)
 	ON_UPDATE_COMMAND_UI(ID_BTN_TIMER, &CCG2022111073冯杰Doc::OnUpdateBtnTimer)
+	ON_COMMAND(CAMERACONTROL, &CCG2022111073冯杰Doc::OnCameracontrol)
 END_MESSAGE_MAP()
 
 
@@ -1028,4 +1030,28 @@ void CCG2022111073冯杰Doc::OnUpdateBtnTimer(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(mTimer != 0);
+}
+
+void CCG2022111073冯杰Doc::OnViewResize(int cx, int cy) {
+	mScene->GetMainCamera()->viewport()->set(0, 0, cx, cy);
+}
+void CCG2022111073冯杰Doc::OnCameracontrol()
+{
+	//// TODO: 在此添加命令处理程序代码
+	CCG2022111073冯杰View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL) {
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022111073冯杰View))) {
+			view = dynamic_cast<CCG2022111073冯杰View*>(pView);
+			break;
+		}
+	}
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	if (view != nullptr) {
+		UIEventHandler::SetCommand(
+			new CameraControl(view->glfwWindow(), mScene->GetMainCamera()));
+	}
 }
