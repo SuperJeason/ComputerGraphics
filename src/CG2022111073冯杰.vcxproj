@@ -202,7 +202,10 @@
     <ClInclude Include="CGGeode.h" />
     <ClInclude Include="CGGeometry.h" />
     <ClInclude Include="CGGroup.h" />
+    <ClInclude Include="CGLight.h" />
+    <ClInclude Include="CGLightModel.h" />
     <ClInclude Include="CGLineSegment.h" />
+    <ClInclude Include="CGMaterial.h" />
     <ClInclude Include="CGModel2DTransform.h" />
     <ClInclude Include="CGNode.h" />
     <ClInclude Include="CGObject.h" />
@@ -240,7 +243,10 @@
     <ClCompile Include="CGeode.cpp" />
     <ClCompile Include="CGGeometry.cpp" />
     <ClCompile Include="CGGroup.cpp" />
+    <ClCompile Include="CGLight.cpp" />
+    <ClCompile Include="CGLightModel.cpp" />
     <ClCompile Include="CGLineSegment.cpp" />
+    <ClCompile Include="CGMaterial.cpp" />
     <ClCompile Include="CGModel2DTransform.cpp" />
     <ClCompile Include="CGNode.cpp" />
     <ClCompile Include="CGObject.cpp" />

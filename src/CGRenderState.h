@@ -8,7 +8,7 @@ class CGRenderContext;
 
 //OpenGL视为状态机，有一系列开关量（渲染模式）、属性（渲染属性）。如当前深度测试、颜色等。用于Node，包括实例节点与模型
 
-typedef enum
+enum class ERenderState : unsigned int
 {
     RS_VertexAttrib,
     RS_VertexAttrib0 = RS_VertexAttrib,
@@ -150,9 +150,9 @@ typedef enum
     RS_RenderStateCount = RS_TextureMatrix + 8,
 
     RS_NONE
-} ERenderState;
+};
 //开关量
-typedef enum
+enum class EEnable : unsigned int
 {
     // Common ones
     EN_BLEND = GL_BLEND,
@@ -211,7 +211,7 @@ typedef enum
     EN_EnableCount,
 
     EN_UnknownEnable
-} EEnable;
+};
 
 typedef enum
 {
@@ -251,12 +251,13 @@ typedef enum
 
 class CGRenderState : public CGObject
 {
+    DECLARE_SERIAL(CGRenderState);
 public:
     CGRenderState() {}
     virtual ~CGRenderState() = default;
-    virtual ERenderState type() const { return RS_NONE; }
+    virtual ERenderState type() const { return ERenderState::RS_NONE; }
     //需重写的虚函数,index用于多属性比如多光源
-    virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const = 0;
+    virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const {};
 };
 
 //颜色属性
@@ -265,7 +266,7 @@ class CGColor : public CGRenderState
 public:
     CGColor() : mColor(1, 1, 1, 1) {}
     virtual ~CGColor() = default;
-    virtual ERenderState type() const { return RS_Color; }
+    virtual ERenderState type() const { return ERenderState::RS_Color; }
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const;
 
     void setValue(const glm::vec4& color) { mColor = color; }
@@ -280,7 +281,7 @@ class CGPointSize : public CGRenderState
 public:
     CGPointSize(float pointsize = 1.0f) : mPointSize(pointsize) {}
     virtual ~CGPointSize() = default;
-    virtual ERenderState type() const { return RS_PointSize; }
+    virtual ERenderState type() const { return ERenderState::RS_PointSize; }
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const;
 
     void set(float pointsize) { mPointSize = pointsize; }
@@ -295,7 +296,7 @@ class CGLineWidth : public CGRenderState
 public:
     CGLineWidth(float linewidth = 1.0f) : mLineWidth(linewidth) {}
     virtual ~CGLineWidth() = default;
-    virtual ERenderState type() const { return RS_LineWidth; }
+    virtual ERenderState type() const { return ERenderState::RS_LineWidth; }
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const;
 
     void set(float linewidth) { mLineWidth = linewidth; }
@@ -310,7 +311,7 @@ class CGLineStipple : public CGRenderState
 public:
     CGLineStipple(int factor = 1, GLushort pattern = ~(GLushort)0) : mFactor(factor), mPattern(pattern) {}
     virtual ~CGLineStipple() = default;
-    virtual ERenderState type() const { return RS_LineStipple; }
+    virtual ERenderState type() const { return ERenderState::RS_LineStipple; }
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const;
 
     void set(int factor, GLushort pattern) { mFactor = factor; mPattern = pattern; }
@@ -328,7 +329,7 @@ class CGPolygonMode : public CGRenderState
 public:
     CGPolygonMode(EPolygonMode frontface = PM_FILL, EPolygonMode backface = PM_FILL) : mFrontFace(frontface), mBackFace(backface) {}
     virtual ~CGPolygonMode() = default;
-    virtual ERenderState type() const { return RS_PolygonMode; }
+    virtual ERenderState type() const { return ERenderState::RS_PolygonMode; }
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const;
 
     void set(EPolygonMode frontface, EPolygonMode backface) { mFrontFace = frontface; mBackFace = backface; }
@@ -345,8 +346,8 @@ class CGEnableSet : public CGObject
 {
 public:
     CGEnableSet() {
-        mEnables.push_back(EN_DITHER);
-        mEnables.push_back(EN_MULTISAMPLE);
+        mEnables.push_back(EEnable::EN_DITHER);
+        mEnables.push_back(EEnable::EN_MULTISAMPLE);
     }
     void enable(EEnable capability)
     {

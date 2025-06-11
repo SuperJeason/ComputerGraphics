@@ -82,4 +82,18 @@ public:
 	void setViewport(Viewport* viewport) { mViewport = std::shared_ptr<Viewport>(viewport); }
 	Viewport* viewport() { return mViewport.get(); }
 	const Viewport * viewport() const { return mViewport.get(); }
+public:
+	// 添加视图矩阵计算方法
+	glm::mat4 viewMatrix() const {
+		return glm::lookAt(mEye, mTarget, mUp);
+	}
+	// 或者如果需要缓存矩阵
+	void updateViewMatrix() {
+		mViewMatrix = glm::lookAt(mEye, mTarget, mUp);
+	}
+	glm::mat4 getViewMatrix() const {
+		return mViewMatrix;
+	}
+private:
+	glm::mat4 mViewMatrix; // 可选：存储计算好的视图矩阵
 };

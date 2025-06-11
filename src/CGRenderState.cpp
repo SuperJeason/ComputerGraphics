@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CGRenderState.h"
-
+IMPLEMENT_SERIAL(CGRenderState,CGObject, 1) // 根据实际基类调整
 void CGColor::apply(const CGCamera* camera, CGRenderContext* ctx, int index) const
 {
 	glColor4f(mColor.r, mColor.g, mColor.b, mColor.a);
@@ -76,11 +76,14 @@ void CGRenderStateSet::apply(const CGCamera* camera, CGRenderContext* ctx)
 {
 	for (auto itr = mModes.begin(); itr != mModes.end(); ++itr)
 	{
+		// 将 EEnable 强枚举类型显式转换为 GLenum
+		GLenum state = static_cast<GLenum>(itr->first); // <-- 关键修复
+
 		if (itr->second) {
-			glEnable(itr->first);
+			glEnable(state);  // 使用转换后的值
 		}
 		else {
-			glDisable(itr->first);
+			glDisable(state); // 使用转换后的值
 		}
 	}
 	for (auto itr = mRenderStates.begin(); itr != mRenderStates.end(); ++itr) {
